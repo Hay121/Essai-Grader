@@ -8,7 +8,10 @@ const API = (() => {
     async function request(method, path, body = null) {
         const opts = {
             method,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': 'true'
+            },
         };
         if (body) opts.body = JSON.stringify(body);
         const res = await fetch(`${BASE}${path}`, opts);

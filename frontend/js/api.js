@@ -3,7 +3,7 @@
  * Handles all communication with the FastAPI backend.
  */
 const API = (() => {
-    const BASE = 'http://localhost:8000';
+    const BASE = 'https://kortney-hamulate-annamarie.ngrok-free.dev';
 
     async function request(method, path, body = null) {
         const opts = {

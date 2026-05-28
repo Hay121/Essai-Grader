@@ -1,4 +1,5 @@
 @echo off
+cd /d "%~dp0"
 echo ==============================================
 echo Menjalankan EssayGrader System (Hybrid Edition)
 echo ==============================================
@@ -48,12 +49,16 @@ if errorlevel 1 (
 cd ..
 
 echo [2/3] Menjalankan Backend (Mesin AI)...
-start cmd /k "cd engine && title AI Backend Server && echo Memulai Server AI... && %PYTHON_CMD% main.py"
+start "" cmd /k "cd engine && title AI Backend Server && echo Memulai Server AI... && "%PYTHON_CMD%" main.py"
 
 echo [3/3] Menjalankan Frontend (UI Web)...
-start cmd /k "cd frontend && title Web Frontend && echo Memulai Server Frontend... && %PYTHON_CMD% -m http.server 3000"
+start "" cmd /k "cd frontend && title Web Frontend && echo Memulai Server Frontend... && "%PYTHON_CMD%" -m http.server 3000"
 
 echo.
-echo Kedua server telah dijalankan di jendela terpisah!
+echo [4/4] Menjalankan Ngrok (Jembatan Internet)...
+start "" cmd /k "%USERPROFILE%\ngrok.exe http --url=kortney-hamulate-annamarie.ngrok-free.dev 8000"
+
+echo.
+echo Semua server dan koneksi Ngrok telah dijalankan di jendela terpisah!
 echo Silakan buka browser Anda ke alamat: http://localhost:3000
 echo ==============================================

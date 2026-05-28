@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="EssayGrader — Sistem Penilaian Esai Otomatis untuk guru dan siswa">
+    <title>EssayGrader — Penilaian Esai Otomatis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/essaygrader.css">
+</head>
+
+<body>
+    <!-- Dynamic Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="welcome-content">
+            <h1 class="welcome-title">EssayGrader <span class="text-gradient">AI</span></h1>
+            <p class="welcome-desc">
+                Sistem Penilaian Esai Otomatis berbasis Natural Language Processing (SBERT Hybrid).
+                Tingkatkan efisiensi evaluasi secara objektif, akurat, dan tanpa batasan.
+            </p>
+            <div class="welcome-actions">
+                <button id="btnContinue" class="btn-mari-coba">
+                    Mari Coba
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="arrow-icon">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="welcome-footer-info">
+                Dibuat Oleh Kelompok 5
+            </div>
+        </div>
+    </div>
+
+    <div class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-brand">
+                <div class="brand-name">EssayGrader</div>
+                <div class="brand-sub">Penilaian Esai Otomatis</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="packages" id="navPackages">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                    </svg>
+                    Paket Soal
+                </button>
+                <button class="nav-item" data-view="answers" id="navAnswers">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    Input Jawaban
+                </button>
+                <button class="nav-item" data-view="results" id="navResults">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 20V10" />
+                        <path d="M12 20V4" />
+                        <path d="M6 20v-6" />
+                    </svg>
+                    Hasil Evaluasi
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-status" id="engineStatus">
+                    <span class="status-indicator offline"></span>
+                    <span>Menghubungkan...</span>
+                </div>
+                <div class="datetime-display" id="datetimeDisplay"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- ===== VIEW: Paket Soal ===== -->
+            <section id="view-packages" class="view-panel active">
+                <div class="page-header">
+                    <h1 class="page-title">Paket Soal</h1>
+                    <p class="page-subtitle">Kelola paket ujian, soal, dan kunci jawaban</p>
+                </div>
+
+                <div id="packageAlert" class="hidden"></div>
+
+                <!-- Stats Row -->
+                <div class="stat-row" id="statsRow">
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="statExams">0</div>
+                        <div class="stat-item-label">Paket Ujian</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="statQuestions">0</div>
+                        <div class="stat-item-label">Total Soal</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-item-value" id="statStudents">0</div>
+                        <div class="stat-item-label">Jawaban Masuk</div>
+                    </div>
+                </div>
+
+                <div class="grid-2">
+                    <!-- Exam List -->
+                    <div class="card">
+                        <div class="card-header">
+                            <span>Daftar Paket Ujian</span>
+                        </div>
+                        <div id="examList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.5">
+                                        <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                                    </svg>
+                                </div>
+                                <p>Belum ada paket ujian. Buat paket baru untuk memulai.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Create Exam -->
+                    <div class="card">
+                        <div class="card-header">Buat Paket Ujian Baru</div>
+                        <div id="createExamAlert" class="hidden"></div>
+                        <form id="createExamForm">
+                            <div class="form-group">
+                                <label class="form-label">Judul Ujian</label>
+                                <input type="text" class="form-input" id="newExamTitle"
+                                    placeholder="Contoh: UTS IPA Kelas 10" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Mata Pelajaran</label>
+                                    <input type="text" class="form-input" id="newExamSubject"
+                                        placeholder="IPA, IPS, Bahasa Indonesia..." value="Umum">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Deskripsi (opsional)</label>
+                                <input type="text" class="form-input" id="newExamDesc"
+                                    placeholder="Deskripsi singkat ujian...">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                Buat Paket
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Exam Detail (shown when an exam is selected) -->
+                <div id="examDetailSection" class="hidden mt-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <span id="examDetailSubject" class="exam-card-subject"></span>
+                                <span id="examDetailTitle" style="font-size:1.05rem;font-weight:700"></span>
+                            </div>
+                            <button class="btn btn-ghost btn-sm" id="closeDetailBtn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18" />
+                                    <line x1="6" y1="6" x2="18" y2="18" />
+                                </svg>
+                                Tutup
+                            </button>
+                        </div>
+                        <div id="examDetailContent">
+                            <div class="empty-state">
+                                <p>Belum ada soal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Question Form -->
+                    <div class="card mt-1">
+                        <div class="card-header">Tambah Soal Baru</div>
+                        <div id="addQAlert" class="hidden"></div>
+                        <form id="addQuestionForm">
+                            <div class="form-group">
+                                <label class="form-label">Teks Soal</label>
+                                <textarea class="form-textarea" id="questionText"
+                                    placeholder="Tuliskan pertanyaan esai..." required></textarea>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Poin Maksimal</label>
+                                    <input type="number" class="form-input" id="questionMaxPoint" value="20" min="1"
+                                        max="100">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Kunci Jawaban</label>
+                                <textarea class="form-textarea" id="keyText" rows="5"
+                                    placeholder="Tuliskan jawaban referensi yang benar..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19" />
+                                    <line x1="5" y1="12" x2="19" y2="12" />
+                                </svg>
+                                Tambah Soal
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== VIEW: Input Jawaban ===== -->
+            <section id="view-answers" class="view-panel">
+                <div class="page-header">
+                    <h1 class="page-title">Input Jawaban Siswa</h1>
+                    <p class="page-subtitle">Masukkan jawaban siswa per orang — semua soal sekaligus</p>
+                </div>
+
+                <div id="answerAlert" class="hidden"></div>
+
+                <div class="card">
+                    <div class="card-header">Input Jawaban Per Siswa</div>
+                    <form id="submitAnswerForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Pilih Paket Ujian</label>
+                                <select class="form-select" id="answerExamSelect">
+                                    <option value="">-- Pilih paket --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nama Siswa</label>
+                                <input type="text" class="form-input" id="studentName" placeholder="Nama lengkap siswa"
+                                    required>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic answer fields will be rendered here -->
+                        <div id="answerFieldsContainer" class="hidden">
+                            <div class="answer-fields-header">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                    <polyline points="14 2 14 8 20 8" />
+                                    <line x1="16" y1="13" x2="8" y2="13" />
+                                    <line x1="16" y1="17" x2="8" y2="17" />
+                                </svg>
+                                <span id="answerFieldsTitle">Jawaban untuk semua soal</span>
+                            </div>
+                            <div id="answerFields"></div>
+                        </div>
+
+                        <div class="mt-1" id="submitBtnContainer" class="hidden">
+                            <button type="submit" class="btn btn-primary btn-lg" id="submitAnswerBtn" disabled>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M22 2L11 13" />
+                                    <path d="M22 2l-7 20-4-9-9-4 20-7z" />
+                                </svg>
+                                Simpan Semua Jawaban
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ===== VIEW: Hasil Evaluasi ===== -->
+            <section id="view-results" class="view-panel">
+                <div class="page-header flex-between">
+                    <div>
+                        <h1 class="page-title">Hasil Evaluasi</h1>
+                        <p class="page-subtitle">Jalankan evaluasi dan lihat nilai siswa</p>
+                    </div>
+                </div>
+
+                <div id="resultAlert" class="hidden"></div>
+
+                <!-- Evaluate Controls -->
+                <div class="card mb-2">
+                    <div class="card-header">Proses Evaluasi</div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Pilih Paket Ujian</label>
+                            <select class="form-select" id="evalExamSelect">
+                                <option value="">-- Pilih paket --</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="display:flex;align-items:flex-end">
+                            <button type="button" class="btn btn-primary btn-lg" id="evaluateBtn" disabled>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <polygon points="5 3 19 12 5 21 5 3" />
+                                </svg>
+                                Proses Evaluasi
+                            </button>
+                        </div>
+                    </div>
+                    <div id="evalResultMsg" class="hidden"></div>
+                </div>
+
+                <!-- Results Content -->
+                <div id="resultsContent">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M18 20V10" />
+                                <path d="M12 20V4" />
+                                <path d="M6 20v-6" />
+                            </svg>
+                        </div>
+                        <p>Pilih paket ujian dan jalankan evaluasi untuk melihat hasil.</p>
+                    </div>
+                </div>
+
+                <!-- Live Preview (Compact, Collapsible) -->
+                <div class="card mt-2">
+                    <div class="card-header collapsible" id="previewToggle" style="cursor:pointer">
+                        <span class="flex gap-1">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            Cek Cepat (Live Preview)
+                        </span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" id="previewChevron" class="chevron">
+                            <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                    </div>
+                    <div id="previewSection" class="collapsible-content hidden">
+                        <p class="form-hint mb-1">Bandingkan kunci jawaban vs jawaban siswa secara langsung tanpa
+                            menyimpan. Proses aljabar linier akan ditampilkan sebagai bukti analisis.</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Kunci Jawaban</label>
+                                <textarea class="form-textarea" id="previewKey" rows="4"
+                                    placeholder="Masukkan kunci jawaban..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Jawaban Siswa</label>
+                                <textarea class="form-textarea" id="previewAnswer" rows="4"
+                                    placeholder="Masukkan jawaban siswa..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Poin Maksimal</label>
+                                <input type="number" class="form-input" id="previewMaxPoint" value="10" min="1"
+                                    max="100">
+                            </div>
+                            <div class="form-group" style="display:flex;align-items:flex-end">
+                                <button type="button" class="btn btn-outline" id="previewBtn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <polygon points="5 3 19 12 5 21 5 3" />
+                                    </svg>
+                                    Cek Nilai
+                                </button>
+                            </div>
+                        </div>
+                        <div id="previewResult" class="hidden"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

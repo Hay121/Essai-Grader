@@ -753,6 +753,36 @@ const App = (() => {
             </div>`;
         }
 
+        // Step 4.5: Directional Semantic Analysis (Contradiction/Inversion)
+        const s5b = process.step5b_semantic_analysis;
+        if (s5b && s5b.verdict !== 'NEUTRAL') {
+            const isContra = s5b.verdict === 'CONTRADICTION';
+            html += `<div class="process-step">
+                <div class="process-step-header">
+                    <span class="process-step-num" style="background:${isContra ? 'var(--danger)' : 'var(--success)'}">!</span>
+                    <span class="process-step-title">Analisis Arah Proses & Kontradiksi</span>
+                </div>
+                <div class="process-step-body">
+                    <div class="alert alert-${isContra ? 'error' : 'success'}" style="margin-bottom: 1rem; align-items: flex-start; flex-direction: column; gap: 0.25rem;">
+                        <strong style="font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                            ${isContra ? '⚠️ Kontradiksi Makna / Inversi Terdeteksi' : '✅ Parafrase Valid Terdeteksi'}
+                        </strong>
+                        <div style="font-size: 0.95rem; font-weight: 500; opacity: 0.9; margin-top: 0.25rem; width: 100%; text-align: left;">${escapeHtml(s5b.formula)}</div>
+                    </div>
+                    ${s5b.details && s5b.details.length > 0 ? `
+                    <div class="process-calc-grid">
+                        ${s5b.details.map(d => `
+                            <div class="process-calc-item" style="grid-column: span 2; border-left: 4px solid ${isContra ? 'var(--danger)' : 'var(--success)'};">
+                                <div class="process-calc-label">${escapeHtml(d.type)}</div>
+                                <div class="process-calc-value" style="font-size:0.9rem; font-weight:normal; margin-top:0.5rem; line-height:1.4">${escapeHtml(d.description)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    ` : ''}
+                </div>
+            </div>`;
+        }
+
         // Step 5: Final Scoring
         html += `<div class="process-step process-step-final">
             <div class="process-step-header">

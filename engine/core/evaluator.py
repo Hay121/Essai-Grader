@@ -42,6 +42,7 @@ from typing import List, Dict, Optional, Tuple
 from .preprocessor import TextPreprocessor
 from .vectorizer import EssayVectorizer
 from .semantic_model import SemanticModel
+from .contradiction_detector import ContradictionDetector
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,9 @@ class EvaluationResult:
     def __init__(self, student_name: str, question_id: int, answer_id: int,
                  cosine_score: float, final_point: float, max_point: float,
                  matched_keywords: List[str], missing_keywords: List[str],
-                 confidence: float, computation_time_ms: int):
+                 confidence: float, computation_time_ms: int,
+                 contradiction_verdict: str = 'NEUTRAL',
+                 contradiction_details: Optional[List[Dict]] = None):
         self.student_name = student_name
         self.question_id = question_id
         self.answer_id = answer_id
@@ -89,9 +92,11 @@ class EvaluationResult:
         self.confidence = round(confidence, 4)
         self.computation_time_ms = computation_time_ms
         self.percentage = round((final_point / max_point * 100) if max_point > 0 else 0, 1)
+        self.contradiction_verdict = contradiction_verdict
+        self.contradiction_details = contradiction_details or []
 
     def to_dict(self):
-        return {
+        result = {
             'student_name': self.student_name,
             'question_id': self.question_id,
             'answer_id': self.answer_id,
@@ -104,7 +109,12 @@ class EvaluationResult:
             'confidence': self.confidence,
             'computation_time_ms': self.computation_time_ms,
             'grade': self._get_grade(),
+            'semantic_analysis': {
+                'verdict': self.contradiction_verdict,
+                'details': self.contradiction_details,
+            },
         }
+        return result
 
     def _get_grade(self) -> str:
         if self.percentage >= 85: return 'A'
@@ -175,6 +185,7 @@ class EssayEvaluator:
     def __init__(self):
         self.preprocessor = TextPreprocessor()
         self.vectorizer = EssayVectorizer()
+        self.contradiction_detector = ContradictionDetector()
         self._is_ready = False
 
     @property
@@ -347,6 +358,23 @@ class EssayEvaluator:
             # Clamp to [0, 1]
             cos_score = max(0.0, min(1.0, cos_score))
 
+            # === DIRECTIONAL SEMANTIC ANALYSIS ===
+            # Post-scoring contradiction/entailment detection
+            contradiction_analysis = self.contradiction_detector.analyze(
+                key_text, raw_text
+            )
+            cos_score = self.contradiction_detector.apply_penalty(
+                cos_score, contradiction_analysis
+            )
+            contradiction_verdict = contradiction_analysis.get('verdict', 'NEUTRAL')
+            contradiction_details = contradiction_analysis.get('details', [])
+
+            if contradiction_verdict == 'CONTRADICTION':
+                logger.warning(
+                    f"[EVALUATOR] KONTRADIKSI TERDETEKSI pada jawaban '{a['student_name']}': "
+                    f"{[d.get('description', '') for d in contradiction_details]}"
+                )
+
             # Convert to point with power curve
             final_pt = (cos_score ** SCORE_POWER) * max_point
 
@@ -377,6 +405,8 @@ class EssayEvaluator:
                 missing_keywords=kw_missing,
                 confidence=confidence,
                 computation_time_ms=comp_time,
+                contradiction_verdict=contradiction_verdict,
+                contradiction_details=contradiction_details,
             ))
 
         self._is_ready = True
@@ -453,6 +483,21 @@ class EssayEvaluator:
         # Clamp
         cos = max(0.0, min(1.0, cos))
 
+        # === DIRECTIONAL SEMANTIC ANALYSIS ===
+        contradiction_analysis = self.contradiction_detector.analyze(
+            key_text, answer_text
+        )
+        cos_before_penalty = cos
+        cos = self.contradiction_detector.apply_penalty(cos, contradiction_analysis)
+        contradiction_verdict = contradiction_analysis.get('verdict', 'NEUTRAL')
+        contradiction_details = contradiction_analysis.get('details', [])
+
+        if contradiction_verdict == 'CONTRADICTION':
+            logger.warning(
+                f"[EVALUATOR] KONTRADIKSI TERDETEKSI (preview): "
+                f"{[d.get('description', '') for d in contradiction_details]}"
+            )
+
         pt = (cos ** SCORE_POWER) * max_point
         pt = max(0.0, min(max_point, pt))
         pct = (pt / max_point * 100) if max_point > 0 else 0
@@ -504,12 +549,29 @@ class EssayEvaluator:
                 'lexical_score_fallback': round(lexical_score, 4),
                 'projection_score_fallback': round(projection_score, 4),
                 'is_hybrid': sbert_available,
-                'cosine_score': round(cos, 6),
+                'cosine_score': round(cos_before_penalty, 6),
                 'formula': (
                     f"Nilai Dasar = ({WEIGHT_SBERT} × {round(semantic_score, 4)}) + "
-                    f"({WEIGHT_KEYWORD} × {round(keyword_score, 4)}) = {round(cos, 4)}"
+                    f"({WEIGHT_KEYWORD} × {round(keyword_score, 4)}) = {round(cos_before_penalty, 4)}"
                     if sbert_available else
                     f"Menggunakan Proyeksi Vektor Asimetris (s·k / ||k||²) = {round(projection_score, 4)}"
+                ),
+            },
+            'step5b_semantic_analysis': {
+                'verdict': contradiction_verdict,
+                'score_before_penalty': round(cos_before_penalty, 6),
+                'score_after_penalty': round(cos, 6),
+                'penalty_factor': contradiction_analysis.get('penalty_factor', 1.0),
+                'confidence': contradiction_analysis.get('confidence', 0.0),
+                'fatal_count': contradiction_analysis.get('fatal_count', 0),
+                'warning_count': contradiction_analysis.get('warning_count', 0),
+                'details': contradiction_details,
+                'formula': (
+                    f"KONTRADIKSI FATAL: Skor dibatasi maks {round(cos, 4)} (dari {round(cos_before_penalty, 4)})"
+                    if contradiction_verdict == 'CONTRADICTION' else
+                    f"PARAFRASE VALID: Skor dinaikkan ke {round(cos, 4)} (dari {round(cos_before_penalty, 4)})"
+                    if contradiction_verdict == 'ENTAILMENT' else
+                    f"Tidak ada kontradiksi atau parafrase terdeteksi. Skor tetap: {round(cos, 4)}"
                 ),
             },
             'step6_scoring': {
@@ -529,4 +591,8 @@ class EssayEvaluator:
             'key_cleaned': ' '.join(key_tokens), 'answer_cleaned': ' '.join(ans_tokens),
             'vocab_size': self.vectorizer.vocab_size,
             'process': process,
+            'semantic_analysis': {
+                'verdict': contradiction_verdict,
+                'details': contradiction_details,
+            },
         }

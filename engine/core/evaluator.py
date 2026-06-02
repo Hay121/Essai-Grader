@@ -55,13 +55,14 @@ WEIGHT_SBERT = 0.7
 WEIGHT_KEYWORD = 0.3
 
 # Power curve exponent for final scoring
-# 0.7 = slightly generous (rewards partial correctness)
+# 1.5 = strict (penalizes partial correctness to prevent high scores for wrong meaning)
 # 1.0 = linear (strict proportional)
-SCORE_POWER = 0.7
+SCORE_POWER = 1.5
 
 # Threshold for semantic keyword match (SBERT cosine similarity)
 # A concept segment is considered "matched" if sim >= this threshold
-SEMANTIC_KEYWORD_THRESHOLD = 0.55
+# Increased from 0.82 to 0.85 because SBERT gives 0.825 for "zat hijau" vs "penopang"
+SEMANTIC_KEYWORD_THRESHOLD = 0.85
 
 # Try to import C bridge
 try:

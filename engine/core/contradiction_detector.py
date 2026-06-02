@@ -91,7 +91,7 @@ ACTIVE_SVO_PATTERN = re.compile(
 
 # Penalty and boost constants
 CONTRADICTION_SCORE_CAP = 0.10
-ENTAILMENT_BOOST = 1.05
+ENTAILMENT_BOOST = 1.00  # Changed from 1.05 to avoid double-rewarding paraphrases (SBERT already rewards them)
 WARNING_PENALTY = 0.50
 
 

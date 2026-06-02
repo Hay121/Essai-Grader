@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landasan Matematika — EssayGrader</title>
+    
+    <!-- KaTeX CSS & JS for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {
+            delimiters: [
+                {left: '\\[', right: '\\]', display: true},
+                {left: '\\(', right: '\\)', display: false}
+            ],
+            throwOnError: false
+        });"></script>
+    
+    <style>
+        /* ============================================================
+           PROFESSIONAL PDF STYLING - EssayGrader Mathematical Foundations
+           ============================================================ */
+        
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=STIX+Two+Text:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+        
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2c5282;
+            --accent: #3182ce;
+            --accent-light: #63b3ed;
+            --bg: #ffffff;
+            --text: #1a202c;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --border-light: #edf2f7;
+            --code-bg: #f7fafc;
+            --note-bg: #ebf8ff;
+            --note-border: #3182ce;
+            --tip-bg: #f0fff4;
+            --tip-border: #38a169;
+            --important-bg: #fffbeb;
+            --important-border: #d69e2e;
+            --warning-bg: #fff5f5;
+            --warning-border: #e53e3e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'STIX Two Text', 'Inter', 'Georgia', serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 25mm 20mm 25mm 25mm;
+        }
+        
+        /* ---- Page break & print settings ---- */
+        @media print {
+            body {
+                padding: 0;
+                max-width: none;
+            }
+            
+            @page {
+                size: A4;
+                margin: 25mm 20mm 25mm 25mm;
+            }
+            
+            h1, h2, h3, h4 {
+                page-break-after: avoid;
+            }
+            
+            table, pre, .math-display, .alert {
+                page-break-inside: avoid;
+            }
+            
+            .section-divider {
+                page-break-before: auto;
+            }
+        }
+        
+        /* ---- Cover / Title ---- */
+        .main-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 26pt;
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        
+        /* ---- Subtitle (first h2 used as subtitle) ---- */
+        .section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 16pt;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 18px;
+            line-height: 1.3;
+        }
+        
+        .subsection-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 13pt;
+            font-weight: 600;
+            color: var(--primary-light);
+            margin-top: 25px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+        }
+        
+        h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 11.5pt;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        /* ---- Body Text ---- */
+        p {
+            margin-bottom: 10px;
+            text-align: justify;
+            hyphens: auto;
+        }
+        
+        strong {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        /* ---- Lists ---- */
+        ol, ul {
+            margin: 10px 0 10px 25px;
+        }
+        
+        li {
+            margin-bottom: 5px;
+            line-height: 1.6;
+        }
+        
+        /* ---- Horizontal Rule ---- */
+        .section-divider {
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border), var(--accent-light), var(--border), transparent);
+            margin: 30px 0;
+        }
+        
+        /* ---- Tables ---- */
+        .table-wrapper {
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt;
+            margin: 0 auto;
+        }
+        
+        thead {
+            background: var(--primary);
+            color: white;
+        }
+        
+        th {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 9.5pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            padding: 9px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        
+        tbody tr:nth-child(even) {
+            background-color: var(--border-light);
+        }
+        
+        tbody tr:hover {
+            background-color: #edf2f7;
+        }
+        
+        /* ---- Code ---- */
+        .inline-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9.5pt;
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 1px 5px;
+            color: #c7254e;
+        }
+        
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9pt;
+            background: #1a202c;
+            color: #e2e8f0;
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+        
+        .code-block code {
+            font-family: inherit;
+        }
+        
+        /* ---- Mermaid Placeholder ---- */
+        .mermaid-placeholder {
+            background: linear-gradient(135deg, #ebf8ff 0%, #e9d8fd 100%);
+            border: 2px dashed var(--accent);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .mermaid-label {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+        
+        .mermaid-code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8pt;
+            text-align: left;
+            background: rgba(255,255,255,0.7);
+            padding: 12px;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            white-space: pre-wrap;
+        }
+        
+        /* ---- Math ---- */
+        .math-display {
+            margin: 18px 0;
+            text-align: center;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .math-inline {
+            padding: 0 2px;
+        }
+        
+        /* ---- Alerts / Callouts ---- */
+        .alert {
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 15px 0;
+            border-left: 5px solid;
+            font-size: 10pt;
+        }
+        
+        .alert-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 10pt;
+            margin-bottom: 6px;
+        }
+        
+        .alert-note {
+            background: var(--note-bg);
+            border-color: var(--note-border);
+        }
+        .alert-note .alert-title { color: var(--note-border); }
+        
+        .alert-tip {
+            background: var(--tip-bg);
+            border-color: var(--tip-border);
+        }
+        .alert-tip .alert-title { color: var(--tip-border); }
+        
+        .alert-important {
+            background: var(--important-bg);
+            border-color: var(--important-border);
+        }
+        .alert-important .alert-title { color: var(--important-border); }
+        
+        .alert-warning, .alert-caution {
+            background: var(--warning-bg);
+            border-color: var(--warning-border);
+        }
+        .alert-warning .alert-title,
+        .alert-caution .alert-title { color: var(--warning-border); }
+        
+        /* ---- Blockquote ---- */
+        blockquote {
+            border-left: 4px solid var(--border);
+            padding: 10px 16px;
+            margin: 15px 0;
+            background: var(--border-light);
+            border-radius: 0 6px 6px 0;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+        
+        /* ---- Links ---- */
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px dotted var(--accent-light);
+        }
+        
+        /* ---- Table of Contents ---- */
+        ol li a {
+            border-bottom: none;
+        }
+        
+        /* ---- Footer Info ---- */
+        .doc-footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid var(--border);
+            font-family: 'Inter', sans-serif;
+            font-size: 8.5pt;
+            color: var(--text-muted);
+            text-align: center;
+        }
+        
+        /* ---- Page numbers (print) ---- */
+        @media print {
+            body {
+                counter-reset: page-num;
+            }
+            .doc-footer {
+                display: none;
+            }
+        }
+        
+        /* ---- Emoji ---- */
+        .emoji {
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="document-content">
+        <h1 id="landasan-matematika-essaygrader" class="main-title">Landasan Matematika — EssayGrader</h1>
+<h2 id="perhitungan-aljabar-linier-untuk-penilaian-esai-otomatis" class="section-title"><span class="section-number"></span>Perhitungan Aljabar Linier untuk Penilaian Esai Otomatis</h2>
+<hr class="section-divider">
+<h2 id="daftar-isi" class="section-title"><span class="section-number"></span>Daftar Isi</h2>
+<ol>
+<li><a href="#1-arsitektur-pipeline-matematis">Arsitektur Pipeline Matematis</a></li>
+<li><a href="#2-text-preprocessing--tokenisasi">Text Preprocessing & Tokenisasi</a></li>
+<li><a href="#3-term-frequency-tf">Term Frequency (TF)</a></li>
+<li><a href="#4-inverse-document-frequency-idf">Inverse Document Frequency (IDF)</a></li>
+<li><a href="#5-tf-idf-vectorization">TF-IDF Vectorization</a></li>
+<li><a href="#6-normalisasi-l2">Normalisasi L2</a></li>
+<li><a href="#7-cosine-similarity-lexical">Cosine Similarity (Lexical)</a></li>
+<li><a href="#8-asymmetric-projection-score">Asymmetric Projection Score</a></li>
+<li><a href="#9-sbert-dense-embedding-semantic">SBERT Dense Embedding (Semantic)</a></li>
+<li><a href="#10-semantic-keyword-coverage">Semantic Keyword Coverage</a></li>
+<li><a href="#11-hybrid-scoring-formula">Hybrid Scoring Formula</a></li>
+<li><a href="#12-contradiction-detection--penalty">Contradiction Detection & Penalty</a></li>
+<li><a href="#13-power-curve--konversi-nilai-akhir">Power Curve & Konversi Nilai Akhir</a></li>
+<li><a href="#14-confidence-score">Confidence Score</a></li>
+<li><a href="#15-ringkasan-alur-perhitungan">Ringkasan Alur Perhitungan</a></li>
+</ol>
+
+<hr class="section-divider">
+<h2 id="1-arsitektur-pipeline-matematis" class="section-title"><span class="section-number"></span>1. Arsitektur Pipeline Matematis</h2>
+<p>Sistem EssayGrader menggunakan arsitektur <strong>Hybrid Scoring</strong> yang menggabungkan dua pendekatan aljabar linier:</p>
+<div class="mermaid-placeholder"><div class="mermaid-label">📊 Diagram Alur (Mermaid)</div><pre class="mermaid-code">flowchart TD
+    A[&quot;Teks Mentah (Kunci + Jawaban)&quot;] --&gt; B[&quot;Preprocessing &amp; Tokenisasi&quot;]
+    B --&gt; C[&quot;TF-IDF Vectorization (Sparse Vectors)&quot;]
+    B --&gt; D[&quot;SBERT Encoding (Dense Vectors, ℝ³⁸⁴)&quot;]
+    C --&gt; E[&quot;Cosine Similarity / Asymmetric Projection&quot;]
+    D --&gt; F[&quot;Semantic Cosine Similarity&quot;]
+    D --&gt; G[&quot;Semantic Keyword Coverage&quot;]
+    E --&gt; H{&quot;SBERT Tersedia?&quot;}
+    F --&gt; H
+    G --&gt; H
+    H --&gt;|Ya| I[&quot;Hybrid Score = w₁×SBERT + w₂×Keyword&quot;]
+    H --&gt;|Tidak| J[&quot;Fallback Score = Projection Score&quot;]
+    I --&gt; K[&quot;Contradiction Detection&quot;]
+    J --&gt; K
+    K --&gt; L[&quot;Power Curve → Nilai Akhir&quot;]
+</pre></div>
+<p>Pipeline ini mengolah teks mentah menjadi representasi vektor dalam ruang berdimensi tinggi, kemudian mengukur kesamaan antar vektor untuk menghasilkan skor numerik.</p>
+<hr class="section-divider">
+<h2 id="2-text-preprocessing-tokenisasi" class="section-title"><span class="section-number"></span>2. Text Preprocessing & Tokenisasi</h2>
+<p>Sebelum masuk ke operasi aljabar linier, teks mentah dikonversi menjadi daftar token yang bersih melalui pipeline:</p>
+<p><strong>Pipeline Preprocessing:</strong></p>
+<ol>
+<li><strong>Case Normalization</strong>: Semua huruf diubah ke lowercase</li>
+<li><strong>Pembersihan</strong>: Hapus URL, angka, tanda baca</li>
+<li><strong>Tokenisasi</strong>: Pisahkan berdasarkan whitespace → daftar token</li>
+<li><strong>Stopword Removal</strong>: Hapus kata-kata fungsional (dan, atau, di, ke, dari, yang, dll.)</li>
+<li><strong>Indonesian Stemming</strong>: Hapus imbuhan Bahasa Indonesia menggunakan metode Confix-Stripping</li>
+</ol>
+
+<p>Aturan prefiks: me-, mem-, men-, meng-, meny-, ber-, be-, di-, ke-, se-, per-, pe-, ter-</p>
+<p>Aturan sufiks: -kan, -an, -i, -nya, -lah, -kah, -pun</p>
+<ol>
+<li><strong>Normalisasi Sinonim</strong>: Mengganti sinonim ke bentuk kanonik</li>
+<li><strong>Filter Panjang</strong>: Buang token dengan panjang < 3 karakter</li>
+</ol>
+
+<p><strong>Contoh:</strong></p>
+<pre class="code-block"><code class="language-">Input:  &quot;Fotosintesis adalah proses pembuatan makanan oleh tumbuhan hijau&quot;
+Output: [&quot;fotosintesis&quot;, &quot;proses&quot;, &quot;buat&quot;, &quot;makan&quot;, &quot;tumbuh&quot;, &quot;hijau&quot;]
+</code></pre>
+<div class="alert alert-note"><div class="alert-title">📝 Catatan</div><p>Kualitas preprocessing sangat mempengaruhi ketepatan representasi vektor TF-IDF. Token yang telah di-stem dan dinormalisasi akan membentuk dimensi-dimensi dalam ruang vektor.</p></div>
+<hr class="section-divider">
+<h2 id="3-term-frequency-tf" class="section-title"><span class="section-number"></span>3. Term Frequency (TF)</h2>
+<p>Term Frequency mengukur seberapa sering suatu term muncul dalam sebuah dokumen. Sistem ini mendukung dua mode:</p>
+<h3 id="tf-linier-standard" class="subsection-title">TF Linier (Standard)</h3>
+<div class="math-display">\[\text{TF}(t, d) = \frac{f(t, d)}{|d|}\]</div>
+<p>dengan:</p>
+<ul>
+<li><em>f(t, d)</em> = frekuensi kemunculan term <em>t</em> dalam dokumen <em>d</em></li>
+</ul>
+
+<div class="table-wrapper"><table>
+<thead><tr><th>- *</th><th>d</th><th><em> = jumlah total term dalam dokumen </em>d*</th></tr></thead>
+<tbody>
+</tbody></table></div>
+
+<h3 id="tf-sublinear-default" class="subsection-title">TF Sublinear (Default)</h3>
+<p>Untuk mengurangi dominasi term yang sangat sering muncul, sistem menggunakan skala logaritmik:</p>
+<div class="math-display">\[\text{TF}_{\text{sub}}(t, d) = \ln(1 + f(t, d))\]</div>
+<div class="alert alert-important"><div class="alert-title">⚠️ Penting</div><p>Sistem menggunakan <strong>sublinear TF</strong> secara default. Ini mencegah term yang muncul berkali-kali (misalnya "dan" yang lolos filter) dari mendominasi vektor secara tidak proporsional.</p></div>
+<hr class="section-divider">
+<h2 id="4-inverse-document-frequency-idf" class="section-title"><span class="section-number"></span>4. Inverse Document Frequency (IDF)</h2>
+<p>IDF mengukur seberapa langka atau penting suatu term di seluruh korpus dokumen. Term yang muncul di hampir semua dokumen mendapat bobot IDF rendah.</p>
+<div class="math-display">\[\text{IDF}(t) = \ln\left(\frac{N}{1 + \text{df}(t)}\right) + 1.0\]</div>
+<p>dengan:</p>
+<ul>
+<li><em>N</em> = jumlah total dokumen dalam korpus (kunci jawaban + semua jawaban mahasiswa)</li>
+<li><em>df(t)</em> = jumlah dokumen yang mengandung term <em>t</em></li>
+<li>Penambahan 1 pada penyebut (smoothing) mencegah pembagian dengan nol</li>
+<li>Penambahan 1.0 pada hasil memastikan IDF selalu positif</li>
+</ul>
+
+<p><strong>Properti IDF:</strong></p>
+<ul>
+<li>Term yang muncul di <strong>semua</strong> dokumen: IDF mendekati 1.0 (bobot rendah)</li>
+<li>Term yang muncul di <strong>sedikit</strong> dokumen: IDF > 1.0 (bobot tinggi, term langka/penting)</li>
+<li>Term yang <strong>tidak muncul</strong> di dokumen manapun: tidak masuk vocabulary</li>
+</ul>
+
+<hr class="section-divider">
+<h2 id="5-tf-idf-vectorization" class="section-title"><span class="section-number"></span>5. TF-IDF Vectorization</h2>
+<p>Setiap dokumen direpresentasikan sebagai vektor dalam ruang berdimensi <em>m</em> (ukuran vocabulary). Nilai setiap dimensi adalah bobot TF-IDF untuk term yang bersesuaian.</p>
+<h3 id="konstruksi-vektor-tf-idf" class="subsection-title">Konstruksi Vektor TF-IDF</h3>
+<p>Misalkan vocabulary mengandung <em>m</em> term unik: {<em>t</em>₁, <em>t</em>₂, ..., <em>t</em>ₘ}. Untuk dokumen <em>d</em>, vektor TF-IDF didefinisikan sebagai:</p>
+<div class="math-display">\[\vec{v}_d = \begin{pmatrix} w_1 \\ w_2 \\ \vdots \\ w_m \end{pmatrix}\]</div>
+<p>dengan elemen:</p>
+<div class="math-display">\[w_i = \text{TF}_{\text{sub}}(t_i, d) \times \text{IDF}(t_i)\]</div>
+<h3 id="matriks-term-document" class="subsection-title">Matriks Term-Document</h3>
+<p>Jika terdapat <em>n</em> dokumen, maka seluruh representasi membentuk <strong>Matriks Term-Document</strong> A berukuran <em>n</em> × <em>m</em>:</p>
+<div class="math-display">\[A = \begin{pmatrix}
+w_{1,1} & w_{1,2} & \cdots & w_{1,m} \\
+w_{2,1} & w_{2,2} & \cdots & w_{2,m} \\
+\vdots  & \vdots  & \ddots & \vdots  \\
+w_{n,1} & w_{n,2} & \cdots & w_{n,m}
+\end{pmatrix}\]</div>
+<p>dengan baris ke-<em>i</em> merupakan vektor TF-IDF dari dokumen ke-<em>i</em>, dan kolom ke-<em>j</em> merupakan bobot term ke-<em>j</em> di seluruh dokumen.</p>
+<p><strong>Contoh Tabel TF-IDF:</strong></p>
+<div class="table-wrapper"><table>
+<thead><tr><th>Term</th><th>TF (Kunci)</th><th>IDF</th><th>TF-IDF (Kunci)</th><th>TF (Jawaban)</th><th>TF-IDF (Jawaban)</th></tr></thead>
+<tbody>
+<tr><td>fotosintesis</td><td>0.693</td><td>1.405</td><td>0.974</td><td>0.693</td><td>0.974</td></tr>
+<tr><td>proses</td><td>0.693</td><td>1.000</td><td>0.693</td><td>0.000</td><td>0.000</td></tr>
+<tr><td>cahaya</td><td>0.693</td><td>1.405</td><td>0.974</td><td>0.693</td><td>0.974</td></tr>
+<tr><td>tumbuh</td><td>0.693</td><td>1.000</td><td>0.693</td><td>0.693</td><td>0.693</td></tr>
+</tbody></table></div>
+
+<hr class="section-divider">
+<h2 id="6-normalisasi-l2" class="section-title"><span class="section-number"></span>6. Normalisasi L2</h2>
+<p>Setelah konstruksi vektor TF-IDF, setiap vektor dinormalisasi menggunakan norma L2 (Euclidean norm) agar memiliki panjang satuan (unit vector).</p>
+<h3 id="norma-l2" class="subsection-title">Norma L2</h3>
+<div class="math-display">\[\|\vec{v}\| = \sqrt{\sum_{i=1}^{m} v_i^2}\]</div>
+<h3 id="vektor-ternormalisasi" class="subsection-title">Vektor Ternormalisasi</h3>
+<div class="math-display">\[\hat{v} = \frac{\vec{v}}{\|\vec{v}\|}\]</div>
+<p>sehingga <span class="math-inline">\(\|\hat{v}\| = 1\)</span></p>
+<p><strong>Tujuan normalisasi:</strong></p>
+<ul>
+<li>Menghilangkan pengaruh panjang dokumen terhadap skor kesamaan</li>
+<li>Memungkinkan cosine similarity dihitung sebagai <strong>dot product</strong> saja (karena norma = 1)</li>
+<li>Memastikan semua vektor berada pada permukaan unit hypersphere di ℝᵐ</li>
+</ul>
+
+<div class="alert alert-tip"><div class="alert-title">💡 Tips</div><p>Setelah normalisasi L2, cosine similarity antara dua vektor menjadi setara dengan dot product: cos(θ) = â · b̂ = Σ(âᵢ × b̂ᵢ), karena ‖â‖ = ‖b̂‖ = 1.</p></div>
+<hr class="section-divider">
+<h2 id="7-cosine-similarity-lexical" class="section-title"><span class="section-number"></span>7. Cosine Similarity (Lexical)</h2>
+<p>Cosine Similarity mengukur sudut antara dua vektor dalam ruang berdimensi tinggi. Nilai cosine similarity tidak bergantung pada panjang vektor, hanya pada <strong>arah</strong> (orientasi) vektor.</p>
+<h3 id="definisi" class="subsection-title">Definisi</h3>
+<p>Diberikan vektor kunci jawaban <strong>k</strong> dan vektor jawaban mahasiswa <strong>s</strong>, keduanya ∈ ℝᵐ:</p>
+<div class="math-display">\[\cos(\theta) = \frac{\vec{k} \cdot \vec{s}}{\|\vec{k}\| \times \|\vec{s}\|}
+= \frac{\displaystyle\sum_{i=1}^{m} k_i \cdot s_i}{\sqrt{\displaystyle\sum_{i=1}^{m} k_i^2} \times \sqrt{\displaystyle\sum_{i=1}^{m} s_i^2}}\]</div>
+<h3 id="interpretasi-geometris" class="subsection-title">Interpretasi Geometris</h3>
+<ul>
+<li><strong>cos(θ) = 1</strong>: Kedua vektor searah sempurna (jawaban identik secara leksikal)</li>
+<li><strong>cos(θ) = 0</strong>: Kedua vektor ortogonal (tidak ada term yang sama)</li>
+<li><strong>cos(θ) = -1</strong>: Kedua vektor berlawanan arah (secara teoritis, jarang terjadi di TF-IDF)</li>
+</ul>
+
+<h3 id="pada-vektor-ternormalisasi" class="subsection-title">Pada Vektor Ternormalisasi</h3>
+<p>Karena vektor sudah dinormalisasi L2 (‖k̂‖ = ‖ŝ‖ = 1), rumus menjadi:</p>
+<div class="math-display">\[\cos(\theta) = \hat{k} \cdot \hat{s} = \sum_{i=1}^{m} \hat{k}_i \cdot \hat{s}_i\]</div>
+<div class="alert alert-note"><div class="alert-title">📝 Catatan</div><p>Cosine similarity digunakan dalam mode <strong>fallback</strong> (ketika SBERT tidak tersedia) dan juga untuk tujuan tampilan/debug pada mode hybrid.</p></div>
+<hr class="section-divider">
+<h2 id="8-asymmetric-projection-score" class="section-title"><span class="section-number"></span>8. Asymmetric Projection Score</h2>
+<p>Sistem ini memperkenalkan <strong>Asymmetric Projection Score</strong> sebagai alternatif cosine similarity standar. Metode ini dirancang agar <strong>jawaban panjang tidak dihukum</strong> selama mengandung konsep-konsep kunci.</p>
+<h3 id="definisi" class="subsection-title">Definisi</h3>
+<div class="math-display">\[\text{proj} = \frac{\vec{s} \cdot \vec{k}}{\|\vec{k}\|^2}\]</div>
+<p>dengan:</p>
+<ul>
+<li><strong>s</strong> = vektor TF-IDF jawaban mahasiswa (sudah L2-normalized)</li>
+<li><strong>k</strong> = vektor TF-IDF kunci jawaban (sudah L2-normalized)</li>
+<li>‖<strong>k</strong>‖² = <strong>k</strong> · <strong>k</strong> = dot product kunci jawaban dengan dirinya sendiri</li>
+</ul>
+
+<h3 id="perbedaan-dengan-cosine-similarity" class="subsection-title">Perbedaan dengan Cosine Similarity</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Aspek</th><th>Cosine Similarity</th><th>Asymmetric Projection</th></tr></thead>
+<tbody>
+<tr><td><strong>Rumus</strong></td><td>(A·B) / (‖A‖ × ‖B‖)</td><td>(s·k) / ‖k‖²</td></tr>
+<tr><td><strong>Normalisasi</strong></td><td>Oleh kedua vektor</td><td>Hanya oleh vektor kunci</td></tr>
+<tr><td><strong>Efek jawaban panjang</strong></td><td>Dihukum (‖B‖ besar → skor kecil)</td><td>Tidak dihukum</td></tr>
+<tr><td><strong>Fokus</strong></td><td>Kesamaan arah</td><td>Cakupan konsep kunci</td></tr>
+</tbody></table></div>
+
+<h3 id="interpretasi-geometris" class="subsection-title">Interpretasi Geometris</h3>
+<p>Projection score mengukur <strong>seberapa besar komponen vektor jawaban yang jatuh pada arah vektor kunci</strong>. Secara geometris, ini adalah panjang proyeksi vektor <strong>s</strong> ke arah <strong>k</strong>.</p>
+<div class="math-display">\[\text{proj}_{\vec{k}} \vec{s} = \frac{\vec{s} \cdot \vec{k}}{\|\vec{k}\|^2} \cdot \vec{k}\]</div>
+<p>Nilai skalar projection (yang digunakan sebagai skor):</p>
+<ul>
+<li><strong>proj = 1.0</strong>: Jawaban mencakup semua konsep kunci dengan proporsi tepat</li>
+<li><strong>proj > 1.0</strong>: Jawaban melebihi konsep kunci (di-clamp ke 1.0)</li>
+<li><strong>proj = 0.0</strong>: Tidak ada overlap sama sekali</li>
+</ul>
+
+<div class="alert alert-important"><div class="alert-title">⚠️ Penting</div><p>Asymmetric Projection digunakan sebagai skor utama dalam <strong>Fallback Mode</strong> (tanpa SBERT). Skor di-clamp ke rentang [0, 1].</p></div>
+<hr class="section-divider">
+<h2 id="9-sbert-dense-embedding-semantic" class="section-title"><span class="section-number"></span>9. SBERT Dense Embedding (Semantic)</h2>
+<p>Berbeda dengan TF-IDF yang menghasilkan vektor sparse berbasis kemunculan kata, SBERT (Sentence-BERT) menghasilkan vektor dense yang menangkap <strong>makna semantik</strong> kalimat.</p>
+<h3 id="arsitektur-sbert" class="subsection-title">Arsitektur SBERT</h3>
+<p>Model yang digunakan: <code class="inline-code">paraphrase-multilingual-MiniLM-L12-v2</code></p>
+<p>Setiap teks diencode menjadi vektor dense <strong>384 dimensi</strong>:</p>
+<div class="math-display">\[\text{SBERT}: \text{text} \rightarrow \vec{e} \in \mathbb{R}^{384}\]</div>
+<h3 id="encoding-dan-normalisasi" class="subsection-title">Encoding dan Normalisasi</h3>
+<p>Vektor output SBERT langsung dinormalisasi L2 saat encoding:</p>
+<div class="math-display">\[\hat{e} = \frac{\text{SBERT}(\text{text})}{\|\text{SBERT}(\text{text})\|}\]</div>
+<p>sehingga ‖ê‖ = 1</p>
+<h3 id="semantic-cosine-similarity" class="subsection-title">Semantic Cosine Similarity</h3>
+<p>Karena vektor SBERT sudah ternormalisasi, similarity dihitung sebagai dot product:</p>
+<div class="math-display">\[\text{sim}_{\text{semantic}}(\text{kunci}, \text{jawaban}) = \hat{e}_{\text{kunci}} \cdot \hat{e}_{\text{jawaban}} = \sum_{i=1}^{384} \hat{e}_{\text{kunci},i} \times \hat{e}_{\text{jawaban},i}\]</div>
+<h3 id="keunggulan-sbert-vs-tf-idf" class="subsection-title">Keunggulan SBERT vs TF-IDF</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Aspek</th><th>TF-IDF (Sparse)</th><th>SBERT (Dense)</th></tr></thead>
+<tbody>
+<tr><td><strong>Dimensi</strong></td><td><em>m</em> (ukuran vocabulary, variabel)</td><td>384 (tetap)</td></tr>
+<tr><td><strong>Representasi</strong></td><td>Kemunculan kata eksak</td><td>Makna semantik</td></tr>
+<tr><td><strong>Sinonim</strong></td><td><span class="emoji">❌</span> Tidak terdeteksi</td><td><span class="emoji">✅</span> Terdeteksi</td></tr>
+<tr><td><strong>Parafrase</strong></td><td><span class="emoji">❌</span> Tidak terdeteksi</td><td><span class="emoji">✅</span> Terdeteksi</td></tr>
+<tr><td><strong>Bahasa</strong></td><td>Satu bahasa</td><td>50+ bahasa</td></tr>
+</tbody></table></div>
+
+<p><strong>Contoh:</strong></p>
+<ul>
+<li>TF-IDF: "membuat makanan" vs "menghasilkan glukosa" → similarity <strong>rendah</strong> (kata berbeda)</li>
+<li>SBERT: "membuat makanan" vs "menghasilkan glukosa" → similarity <strong>tinggi</strong> (makna serupa)</li>
+</ul>
+
+<hr class="section-divider">
+<h2 id="10-semantic-keyword-coverage" class="section-title"><span class="section-number"></span>10. Semantic Keyword Coverage</h2>
+<p>Sistem memecah kunci jawaban menjadi <strong>segmen konsep</strong> dan memeriksa apakah setiap konsep tercakup secara semantik dalam jawaban mahasiswa.</p>
+<h3 id="segmentasi-konsep" class="subsection-title">Segmentasi Konsep</h3>
+<p>Kunci jawaban dipecah berdasarkan batas kalimat (<code class="inline-code">.</code>, <code class="inline-code">;</code>, <code class="inline-code">!</code>, <code class="inline-code">?</code>) dan klausa (<code class="inline-code">,</code>):</p>
+<div class="math-display">\[\text{Kunci} \rightarrow \{c_1, c_2, c_3, \ldots, c_n\}\]</div>
+<h3 id="pencocokan-semantik-per-konsep" class="subsection-title">Pencocokan Semantik Per-Konsep</h3>
+<p>Setiap segmen konsep <em>cᵢ</em> dan keseluruhan jawaban mahasiswa <em>A</em> diencode menggunakan SBERT:</p>
+<div class="math-display">\[\hat{e}_{c_i} = \text{SBERT}(c_i), \quad \hat{e}_A = \text{SBERT}(A)\]</div>
+<p>Kemudian dihitung cosine similarity antara konsep dan jawaban:</p>
+<div class="math-display">\[\text{sim}_i = \hat{e}_{c_i} \cdot \hat{e}_A\]</div>
+<p>Konsep dianggap <strong>tercakup</strong> jika:</p>
+<div class="math-display">\[\text{sim}_i \geq \tau \quad (\tau = 0.85)\]</div>
+<h3 id="skor-keyword-coverage" class="subsection-title">Skor Keyword Coverage</h3>
+<div class="math-display">\[\text{KeywordScore} = \frac{|\{c_i : \text{sim}_i \geq \tau\}|}{n}
+= \frac{\text{Jumlah konsep yang cocok}}{\text{Total konsep dalam kunci}}\]</div>
+<p>Skor ini menghasilkan nilai ∈ [0, 1] yang menunjukkan <strong>proporsi konsep kunci yang tercakup</strong> dalam jawaban.</p>
+<hr class="section-divider">
+<h2 id="11-hybrid-scoring-formula" class="section-title"><span class="section-number"></span>11. Hybrid Scoring Formula</h2>
+<p>Skor akhir dihitung menggunakan <strong>Weighted Linear Combination</strong> dari dua komponen:</p>
+<h3 id="mode-hybrid-sbert-tersedia" class="subsection-title">Mode Hybrid (SBERT Tersedia)</h3>
+<div class="math-display">\[\text{HybridScore} = w_1 \times \text{sim}_{\text{semantic}} + w_2 \times \text{KeywordScore}\]</div>
+<p>dengan bobot default:</p>
+<ul>
+<li><em>w</em>₁ = <strong>0.7</strong> (bobot SBERT semantic similarity)</li>
+<li><em>w</em>₂ = <strong>0.3</strong> (bobot semantic keyword coverage)</li>
+<li><em>w</em>₁ + <em>w</em>₂ = 1.0</li>
+</ul>
+
+<div class="math-display">\[\text{HybridScore} = 0.7 \times \text{sim}_{\text{semantic}} + 0.3 \times \text{KeywordScore}\]</div>
+<h3 id="mode-fallback-tanpa-sbert" class="subsection-title">Mode Fallback (Tanpa SBERT)</h3>
+<div class="math-display">\[\text{FallbackScore} = \text{proj} = \frac{\vec{s} \cdot \vec{k}}{\|\vec{k}\|^2}\]</div>
+<p>Menggunakan Asymmetric Projection Score secara langsung.</p>
+<h3 id="clamping" class="subsection-title">Clamping</h3>
+<p>Semua skor di-clamp ke rentang [0, 1]:</p>
+<div class="math-display">\[\text{Score} = \max(0, \min(1, \text{HybridScore}))\]</div>
+<hr class="section-divider">
+<h2 id="12-contradiction-detection-penalty" class="section-title"><span class="section-number"></span>12. Contradiction Detection & Penalty</h2>
+<p>Setelah skor hybrid dihitung, sistem melakukan <strong>Directional Semantic Analysis</strong> untuk mendeteksi kesalahan fatal yang tidak terdeteksi oleh cosine similarity.</p>
+<h3 id="tiga-lapisan-deteksi" class="subsection-title">Tiga Lapisan Deteksi</h3>
+<h4 id="1-role-inversion-inversi-peran-aktor">1. Role Inversion (Inversi Peran Aktor)</h4>
+<p>Mendeteksi pertukaran Subjek-Objek:</p>
+<ul>
+<li><strong>Kunci</strong>: "Indonesia dijajah oleh Belanda"</li>
+<li><strong>Jawaban</strong>: "Belanda dijajah oleh Indonesia"</li>
+<li>→ <strong>FATAL</strong>: Peran pelaku dan penderita terbalik</li>
+</ul>
+
+<p>Deteksi dilakukan melalui ekstraksi triple <strong>SVO (Subject-Verb-Object)</strong> dari pola kalimat pasif dan aktif Bahasa Indonesia:</p>
+<ul>
+<li>Pasif: [Patient] + di-[verb] + oleh + [Agent]</li>
+<li>Aktif: [Agent] + me-[verb] + [Patient]</li>
+</ul>
+
+<h4 id="2-negation-contradiction-kontradiksi-negasi">2. Negation Contradiction (Kontradiksi Negasi)</h4>
+<p>Mendeteksi pembalikan fakta melalui negasi:</p>
+<ul>
+<li><strong>Kunci</strong>: "Tumbuhan memerlukan cahaya matahari"</li>
+<li><strong>Jawaban</strong>: "Tumbuhan <strong>tidak</strong> memerlukan cahaya matahari"</li>
+<li>→ <strong>FATAL</strong>: Negasi membalik kebenaran</li>
+</ul>
+
+<p>Deteksi: menghitung jumlah kata negasi (tidak, bukan, tanpa, belum, dll.) per klausa. Jika delta jumlah negasi antara kunci dan jawaban <strong>ganjil</strong>, makna terbalik.</p>
+<div class="math-display">\[\Delta_{\text{neg}} = |N_{\text{neg,kunci}} - N_{\text{neg,jawaban}}|\]</div>
+<div class="math-display">\[\text{Terbalik jika } \Delta_{\text{neg}} \mod 2 = 1\]</div>
+<h4 id="3-directional-reversal-pembalikan-arah-proses">3. Directional Reversal (Pembalikan Arah Proses)</h4>
+<p>Mendeteksi pembalikan arah konversi/proses:</p>
+<ul>
+<li><strong>Kunci</strong>: "Energi cahaya diubah menjadi energi kimia"</li>
+<li><strong>Jawaban</strong>: "Energi kimia diubah menjadi energi cahaya"</li>
+<li>→ <strong>FATAL</strong>: Arah konversi terbalik</li>
+</ul>
+
+<p>Deteksi melalui ekstraksi pasangan (Sumber, Target) dari pola "dari X ke Y", "X menjadi Y", "X diubah menjadi Y".</p>
+<h3 id="sistem-penalti" class="subsection-title">Sistem Penalti</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Verdict</th><th>Kondisi</th><th>Aksi terhadap Skor</th></tr></thead>
+<tbody>
+<tr><td><strong>CONTRADICTION</strong></td><td>≥1 temuan FATAL</td><td>Skor dibatasi maks <strong>0.10</strong></td></tr>
+<tr><td><strong>ENTAILMENT</strong></td><td>Tidak ada kontradiksi + vocabulary overlap rendah</td><td>Skor dikalikan <strong>1.00</strong> (bonus parafrase dihapus, bersandar murni pada SBERT)</td></tr>
+<tr><td><strong>NEUTRAL</strong></td><td>Tidak ada temuan</td><td>Skor <strong>tidak berubah</strong></td></tr>
+</tbody></table></div>
+
+<p><strong>Formula penalti:</strong></p>
+<p>Untuk CONTRADICTION:</p>
+<div class="math-display">\[\text{Score}_{\text{adjusted}} = \min(\text{Score}, 0.10)\]</div>
+<p>Untuk ENTAILMENT:</p>
+<div class="math-display">\[\text{Score}_{\text{adjusted}} = \min(\text{Score} \times 1.00, \; 1.0)\]</div>
+<hr class="section-divider">
+<h2 id="13-power-curve-konversi-nilai-akhir" class="section-title"><span class="section-number"></span>13. Power Curve & Konversi Nilai Akhir</h2>
+<p>Setelah semua perhitungan, skor similarity dikonversi menjadi <strong>nilai poin akhir</strong> menggunakan power curve.</p>
+<h3 id="power-curve" class="subsection-title">Power Curve</h3>
+<div class="math-display">\[\text{Nilai Akhir} = \left(\text{Score}_{\text{adjusted}}\right)^p \times \text{Poin Maksimal}\]</div>
+<p>dengan:</p>
+<ul>
+<li><em>p</em> = <strong>1.5</strong> (eksponen power curve)</li>
+<li>Poin Maksimal = bobot soal (biasanya 10 atau 100)</li>
+</ul>
+
+<h3 id="interpretasi-eksponen" class="subsection-title">Interpretasi Eksponen</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>Eksponen <em>p</em></th><th>Efek</th></tr></thead>
+<tbody>
+<tr><td><em>p</em> < 1.0 (misal 0.7)</td><td><strong>Generous</strong> — menghargai jawaban parsial, kurva melengkung ke atas</td></tr>
+<tr><td><em>p</em> = 1.0</td><td><strong>Linear</strong> — proporsional langsung</td></tr>
+<tr><td><em>p</em> > 1.0 (misal 1.5)</td><td><strong>Strict</strong> — menghukum jawaban parsial, kurva melengkung ke bawah</td></tr>
+</tbody></table></div>
+
+<p>Dengan <em>p</em> = 1.5 (Strict):</p>
+<ul>
+<li>Score 0.50 → 0.50¹·⁵ × 10 = <strong>3.54</strong> (bukan 5.0 seperti linear)</li>
+<li>Score 0.80 → 0.80¹·⁵ × 10 = <strong>7.16</strong> (bukan 8.0)</li>
+<li>Score 0.90 → 0.90¹·⁵ × 10 = <strong>8.54</strong> (bukan 9.0)</li>
+</ul>
+
+<h3 id="persentase-dan-grade" class="subsection-title">Persentase dan Grade</h3>
+<div class="math-display">\[\text{Persentase} = \frac{\text{Nilai Akhir}}{\text{Poin Maksimal}} \times 100\%\]</div>
+<div class="table-wrapper"><table>
+<thead><tr><th>Rentang Persentase</th><th>Grade</th></tr></thead>
+<tbody>
+<tr><td>≥ 85%</td><td>A</td></tr>
+<tr><td>≥ 75%</td><td>B</td></tr>
+<tr><td>≥ 60%</td><td>C</td></tr>
+<tr><td>≥ 40%</td><td>D</td></tr>
+<tr><td>< 40%</td><td>E</td></tr>
+</tbody></table></div>
+
+<hr class="section-divider">
+<h2 id="14-confidence-score" class="section-title"><span class="section-number"></span>14. Confidence Score</h2>
+<p>Sistem juga menghitung <strong>Confidence Score</strong> yang mengindikasikan seberapa yakin sistem terhadap penilaian yang diberikan.</p>
+<h3 id="mode-hybrid-sbert" class="subsection-title">Mode Hybrid (SBERT)</h3>
+<div class="math-display">\[\text{Confidence} = 0.5 \times \text{sim}_{\text{semantic}} + 0.3 \times \text{KeywordScore} + 0.2 \times \text{LenRatio}\]</div>
+<h3 id="mode-fallback-tf-idf" class="subsection-title">Mode Fallback (TF-IDF)</h3>
+<div class="math-display">\[\text{Confidence} = 0.7 \times \text{KeywordScore} + 0.3 \times \text{LenRatio}\]</div>
+<p>dengan:</p>
+<div class="math-display">\[\text{LenRatio} = \frac{\min\left(\frac{|\text{tokens}_{\text{jawaban}}|}{|\text{tokens}_{\text{kunci}}|}, \; 2.0\right)}{2.0}\]</div>
+<p>LenRatio menghargai jawaban yang memiliki panjang setidaknya sebanding dengan kunci jawaban, dengan batas atas 2× panjang kunci.</p>
+<hr class="section-divider">
+<h2 id="15-ringkasan-alur-perhitungan" class="section-title"><span class="section-number"></span>15. Ringkasan Alur Perhitungan</h2>
+<p>Berikut rangkuman seluruh pipeline dari teks mentah hingga nilai akhir:</p>
+<div class="mermaid-placeholder"><div class="mermaid-label">📊 Diagram Alur (Mermaid)</div><pre class="mermaid-code">flowchart TD
+    subgraph &quot;STEP 1: Preprocessing&quot;
+        A1[&quot;Teks Mentah&quot;] --&gt; A2[&quot;Lowercase + Hapus Angka/Tanda Baca&quot;]
+        A2 --&gt; A3[&quot;Tokenisasi&quot;]
+        A3 --&gt; A4[&quot;Hapus Stopword&quot;]
+        A4 --&gt; A5[&quot;Stemming (Confix-Stripping)&quot;]
+        A5 --&gt; A6[&quot;Normalisasi Sinonim&quot;]
+        A6 --&gt; A7[&quot;Daftar Token Bersih&quot;]
+    end
+
+    subgraph &quot;STEP 2: Vektorisasi TF-IDF&quot;
+        A7 --&gt; B1[&quot;Bangun Vocabulary dari Semua Dokumen&quot;]
+        B1 --&gt; B2[&quot;Hitung TF sublinear: ln(1 + f)&quot;]
+        B2 --&gt; B3[&quot;Hitung IDF: ln(N/(1+df)) + 1&quot;]
+        B3 --&gt; B4[&quot;TF-IDF = TF × IDF&quot;]
+        B4 --&gt; B5[&quot;Normalisasi L2: v̂ = v/‖v‖&quot;]
+    end
+
+    subgraph &quot;STEP 3: Scoring&quot;
+        B5 --&gt; C1[&quot;SBERT Encoding → ℝ³⁸⁴&quot;]
+        B5 --&gt; C2[&quot;Asymmetric Projection: (s·k)/‖k‖²&quot;]
+        C1 --&gt; C3[&quot;Semantic Similarity: ê_k · ê_s&quot;]
+        C1 --&gt; C4[&quot;Keyword Coverage: matched/total&quot;]
+        C3 --&gt; C5[&quot;Hybrid = 0.7×SBERT + 0.3×Keyword&quot;]
+        C2 --&gt; C6[&quot;Fallback = Projection Score&quot;]
+    end
+
+    subgraph &quot;STEP 4: Post-Processing&quot;
+        C5 --&gt; D1[&quot;Contradiction Detection&quot;]
+        C6 --&gt; D1
+        D1 --&gt; D2[&quot;Penalty/Bonus Application&quot;]
+        D2 --&gt; D3[&quot;Power Curve: Score^1.5 × MaxPoint&quot;]
+        D3 --&gt; D4[&quot;Nilai Akhir + Grade (A/B/C/D/E)&quot;]
+    end
+</pre></div>
+<h3 id="tabel-ringkasan-operasi-aljabar-linier" class="subsection-title">Tabel Ringkasan Operasi Aljabar Linier</h3>
+<div class="table-wrapper"><table>
+<thead><tr><th>No.</th><th>Operasi</th><th>Rumus</th><th>Referensi File</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Term Frequency (Sublinear)</td><td>TF = ln(1 + f(t,d))</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/vectorizer.py#L80-L81">vectorizer.py</a></td></tr>
+<tr><td>2</td><td>Inverse Document Frequency</td><td>IDF = ln(N/(1+df)) + 1</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/vectorizer.py#L56-L60">vectorizer.py</a></td></tr>
+<tr><td>3</td><td>TF-IDF Weighting</td><td>w = TF × IDF</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/vectorizer.py#L82">vectorizer.py</a></td></tr>
+<tr><td>4</td><td>Normalisasi L2</td><td>v̂ = v / ‖v‖</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/vectorizer.py#L83-L86">vectorizer.py</a></td></tr>
+<tr><td>5</td><td>Cosine Similarity</td><td>cos(θ) = (k·s)/(‖k‖×‖s‖)</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/evaluator.py#L450-L457">evaluator.py</a></td></tr>
+<tr><td>6</td><td>Asymmetric Projection</td><td>proj = (s·k)/‖k‖²</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/vectorizer.py#L171-L197">vectorizer.py</a></td></tr>
+<tr><td>7</td><td>Dot Product (SBERT)</td><td>sim = ê_k · ê_s</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/semantic_model.py#L161-L162">semantic_model.py</a></td></tr>
+<tr><td>8</td><td>Hybrid Score</td><td>S = w₁×SBERT + w₂×Keyword</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/evaluator.py#L347">evaluator.py</a></td></tr>
+<tr><td>9</td><td>Contradiction Penalty</td><td>S_adj = min(S, 0.10)</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/contradiction_detector.py#L715-L745">contradiction_detector.py</a></td></tr>
+<tr><td>10</td><td>Power Curve</td><td>Nilai = S^1.5 × MaxPoint</td><td><a href="file:///d:/Download/Project%20Alin%20-%20Copy/engine/core/evaluator.py#L379">evaluator.py</a></td></tr>
+</tbody></table></div>
+
+<h3 id="referensi" class="subsection-title">Referensi</h3>
+<ol>
+<li>Salton, G. & Buckley, C. (1988). "Term-weighting in Automatic Text Retrieval." <em>Information Processing & Management</em>, 24(5), 513–523.</li>
+<li>Reimers, N. & Gurevych, I. (2019). "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks." <em>EMNLP 2019</em>.</li>
+<li>Asian, J., Williams, H.E., & Tahaghoghi, S.M.M. (2005). "Stemming Indonesian: A Confix-Stripping Approach."</li>
+<li>Dagan, I., Glickman, O. & Magnini, B. (2005). "The PASCAL Recognising Textual Entailment Challenge."</li>
+<li>MacCartney, B. & Manning, C.D. (2008). "Modeling Semantic Containment and Exclusion in NLP."</li>
+<li>Berry, M.W., Drmač, Z. & Jessup, E.R. (1999). "Matrices, Vector Spaces, and Information Retrieval." <em>SIAM Review</em>.</li>
+</ol>
+
+    </div>
+    
+    <div class="doc-footer">
+        <p>Dokumen ini digenerate secara otomatis dari <strong>mathematical_foundations.md</strong></p>
+        <p>EssayGrader — Sistem Penilaian Esai Otomatis Berbasis Aljabar Linier</p>
+    </div>
+</body>
+</html>

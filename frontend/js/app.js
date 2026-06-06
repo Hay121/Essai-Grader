@@ -792,7 +792,7 @@ const App = (() => {
             <div class="process-step-body">
                 <div class="process-formula-block">
                     <div class="process-formula-title">Kurva Nilai Akhir:</div>
-                    <div class="process-formula">Nilai = (Nilai Dasar)^0.7 × Poin Maks</div>
+                    <div class="process-formula">Nilai = (Nilai Dasar)^1.0 × Poin Maks</div>
                 </div>
                 <div class="process-formula-block process-result-formula">
                     <div class="process-formula">${escapeHtml(s6.formula)}</div>

@@ -33,13 +33,37 @@ class IndonesianStemmer:
         "Stemming Indonesian: A Confix-Stripping Approach."
     """
 
+    # Common root words or names that end with affixes but should NOT be stemmed
+    ROOT_WORDS = {
+        # Words ending in -an
+        'jalan', 'tangan', 'jangan', 'makan', 'papan', 'badan', 'bukan', 'taman', 
+        'kawan', 'awan', 'korban', 'beban', 'pesan', 'peran', 'alasan', 'hewan', 
+        'tanaman', 'makanan', 'lingkungan', 'pertanian', 'pemerintahan', 'kerongkongan', 
+        'kebangsaan', 'pegangsaan', 'kewarganegaraan', 'kemerdekaan',
+        # Words ending in -kah
+        'naskah', 'apakah', 'langkah', 'berkah', 'serakah',
+        # Words ending in -i
+        'proklamasi', 'sayuti', 'biologi', 'nutrisi', 'diplomasi', 'revolusi', 
+        'lokasi', 'fungsi', 'variasi', 'generasi', 'konsumsi', 'produksi', 
+        'distribusi', 'energi', 'hati', 'mati', 'pasti', 'ganti', 'henti', 
+        'arti', 'bukti', 'janji', 'sekali', 'hari', 'nanti', 'lagi', 'tapi', 
+        'dari', 'kami', 'kiri', 'lari', 'mari', 'pagi', 'rugi', 'suami', 'tari',
+        # Words starting with me-, be-, pe- but are root words or names
+        'melik', 'merdeka', 'mereka', 'memang', 'menang', 'merah', 'mesti',
+        'belajar', 'benar', 'berani', 'belum', 'berita', 'besar', 'besok',
+        'pegang', 'perang', 'pesan', 'peta',
+        # Nouns/terms
+        'ekosistem', 'fotosintesis', 'prokariotik', 'eukariotik', 'pancasila',
+        'soekarno', 'hatta', 'indonesia', 'jakarta', 'agustus', 'oktober'
+    }
+
     PREFIX_RULES = [
         (r'^meny([aiueo])', r's\1'),
         (r'^mem([bfpv])',   r'\1'),
         (r'^memper',        r''),
         (r'^men([cdgjstz])', r'\1'),
         (r'^meng([ghqk])',  r'\1'),
-        (r'^meng([aiueo])', r'\1'),
+        (r'^meng([aiueo])', r'k\1'), # Improved K-P-T-S for k
         (r'^menge',         r''),
         (r'^me',            r''),
         (r'^ber([aiueo])',  r'r\1'),
@@ -51,7 +75,7 @@ class IndonesianStemmer:
         (r'^se',            r''),
         (r'^peny([aiueo])', r's\1'),
         (r'^pem([bfpv])',   r'\1'),
-        (r'^peng([aiueo])', r'\1'),
+        (r'^peng([aiueo])', r'k\1'), # Improved K-P-T-S for k
         (r'^pen([cdgjstz])', r'\1'),
         (r'^pel',           r''),
         (r'^per',           r''),
@@ -72,23 +96,8 @@ class IndonesianStemmer:
     def stem(self, word: str) -> str:
         """
         Stem a single Indonesian word by stripping affixes.
-
-        Implements the Confix-Stripping approach for Indonesian morphology:
-        1. Try prefix removal first, then suffix (handles confixes like
-           me-...-kan, di-...-kan, ber-...-i)
-        2. Fall back to suffix-only removal if no prefix matches
-        3. Fall back to prefix-only if no suffix matched after prefix
-
-        Reference:
-            Asian, J. et al. (2005) "Stemming Indonesian: A Confix-Stripping Approach"
-
-        Args:
-            word: Input word (lowercase)
-
-        Returns:
-            Stemmed word root
         """
-        if len(word) <= 3:
+        if len(word) <= 3 or word in self.ROOT_WORDS:
             return word
 
         original = word
@@ -96,21 +105,28 @@ class IndonesianStemmer:
         # Step 1: Try removing prefix first (primary Indonesian morphology)
         prefix_removed = self._remove_first_prefix(word)
         if prefix_removed != word:
+            # If the stripped prefix resulted in a root word, return it
+            if prefix_removed in self.ROOT_WORDS:
+                return prefix_removed
+                
             # Prefix was removed, now try suffix (min 4 chars to avoid overstemming)
             suffix_removed = self._remove_first_suffix(prefix_removed)
             if suffix_removed != prefix_removed and len(suffix_removed) >= 4:
                 return suffix_removed
             # No valid suffix removal, return prefix-only result
-            if len(prefix_removed) >= 3:
+            if len(prefix_removed) >= 4:
                 return prefix_removed
 
         # Step 2: Fallback — try suffix removal first, then prefix
         suffix_removed = self._remove_first_suffix(word)
         if suffix_removed != word:
+            if suffix_removed in self.ROOT_WORDS:
+                return suffix_removed
+                
             prefix_removed2 = self._remove_first_prefix(suffix_removed)
             if prefix_removed2 != suffix_removed and len(prefix_removed2) >= 4:
                 return prefix_removed2
-            if len(suffix_removed) >= 3:
+            if len(suffix_removed) >= 4:
                 return suffix_removed
 
         return original

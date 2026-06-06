@@ -420,6 +420,11 @@ def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict
         Key:    "Tumbuhan hijau memerlukan cahaya matahari"
         Answer: "Tumbuhan hijau tidak memerlukan cahaya matahari"
         → FATAL: Negation flips the fact
+    
+    Guards against false positives:
+        - Requires high content overlap (>55%) to ensure same-topic comparison
+        - Checks subject consistency to avoid cross-entity false matches
+          (e.g., "prokariotik tidak X" vs "eukariotik X" is NOT a contradiction)
     """
     findings = []
     
@@ -448,9 +453,31 @@ def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict
             overlap = len(k_content & a_content)
             overlap_ratio = overlap / max(len(k_content), len(a_content))
             
-            # Only compare clauses about the same topic (>40% content overlap)
-            if overlap_ratio < 0.40:
+            # Require higher overlap (>55%) to ensure same-topic comparison
+            if overlap_ratio < 0.55:
                 continue
+            
+            # === SUBJECT CONSISTENCY CHECK ===
+            # If clauses discuss different subjects/entities, skip comparison
+            # This prevents false positives like:
+            #   Key: "Sel prokariotik TIDAK memiliki membran inti"
+            #   Ans: "Sel eukariotik memiliki membran inti"
+            # These are complementary facts about DIFFERENT subjects, not contradictions
+            k_non_overlap = k_content - a_content
+            a_non_overlap = a_content - k_content
+            
+            # If both clauses have unique content words, they may be about different subjects
+            # Especially in contrastive structures (e.g., prokariotik vs eukariotik)
+            if k_non_overlap and a_non_overlap:
+                # Check if the unique words are entity/subject differentiators
+                # (not just connecting words or style differences)
+                k_unique_significant = {w for w in k_non_overlap if len(w) >= 4}
+                a_unique_significant = {w for w in a_non_overlap if len(w) >= 4}
+                
+                if k_unique_significant and a_unique_significant:
+                    # Both clauses have unique significant words — likely different subjects
+                    # Example: "prokariotik" (unique to key clause) vs "eukariotik" (unique to answer clause)
+                    continue
             
             # Negation delta: one has negation, other doesn't
             # (or different number of negations → odd means flipped)

@@ -1,0 +1,248 @@
+{
+  "paket_soal": {
+    "Paket 1 — Sejarah Indonesia": {
+      "subject": "Sejarah",
+      "questions": [
+        {
+          "no": 1,
+          "soal": "Jelaskan peristiwa proklamasi kemerdekaan Indonesia pada tanggal 17 Agustus 1945!",
+          "kunci": "Proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno didampingi Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur nomor 56 Jakarta. Naskah proklamasi diketik oleh Sayuti Melik berdasarkan tulisan tangan Soekarno.",
+          "poin": 10
+        },
+        {
+          "no": 2,
+          "soal": "Sebutkan dan jelaskan latar belakang kedatangan bangsa Eropa ke Indonesia!",
+          "kunci": "Bangsa Eropa datang ke Indonesia karena mencari rempah-rempah yang sangat berharga di Eropa. Selain itu mereka ingin menyebarkan agama dan memperluas wilayah kekuasaan. Semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.",
+          "poin": 10
+        },
+        {
+          "no": 3,
+          "soal": "Jelaskan peran Soekarno dalam pergerakan kemerdekaan Indonesia!",
+          "kunci": "Soekarno berperan sebagai tokoh utama pergerakan kemerdekaan Indonesia. Beliau mendirikan Partai Nasional Indonesia pada tahun 1927 untuk memperjuangkan kemerdekaan. Soekarno juga menjadi proklamator yang membacakan naskah proklamasi kemerdekaan.",
+          "poin": 10
+        },
+        {
+          "no": 4,
+          "soal": "Apa yang dimaksud dengan Sumpah Pemuda dan kapan peristiwa itu terjadi?",
+          "kunci": "Sumpah Pemuda adalah ikrar yang diucapkan oleh para pemuda Indonesia pada tanggal 28 Oktober 1928. Isinya menyatakan satu tanah air yaitu Indonesia, satu bangsa yaitu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.",
+          "poin": 10
+        },
+        {
+          "no": 5,
+          "soal": "Jelaskan perjuangan rakyat Indonesia melawan penjajahan Belanda!",
+          "kunci": "Rakyat Indonesia melawan penjajahan Belanda melalui perlawanan bersenjata dan diplomasi. Perlawanan bersenjata dilakukan oleh para pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien. Perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.",
+          "poin": 10
+        },
+        {
+          "no": 6,
+          "soal": "Apa dampak pendudukan Jepang terhadap kehidupan rakyat Indonesia?",
+          "kunci": "Pendudukan Jepang membawa dampak buruk bagi rakyat Indonesia. Rakyat dipaksa menjadi romusha atau pekerja paksa. Hasil pertanian dirampas untuk kepentingan perang Jepang sehingga rakyat mengalami kelaparan dan penderitaan.",
+          "poin": 10
+        }
+      ]
+    },
+    "Paket 2 — Biologi": {
+      "subject": "Biologi",
+      "questions": [
+        {
+          "no": 1,
+          "soal": "Jelaskan proses fotosintesis pada tumbuhan hijau!",
+          "kunci": "Fotosintesis adalah proses pembuatan makanan oleh tumbuhan hijau menggunakan cahaya matahari. Tumbuhan menyerap air dan karbondioksida lalu mengubahnya menjadi glukosa dan oksigen. Proses ini terjadi di kloroplas yang mengandung klorofil.",
+          "poin": 10
+        },
+        {
+          "no": 2,
+          "soal": "Apa perbedaan antara sel prokariotik dan sel eukariotik?",
+          "kunci": "Perbedaan utamanya adalah membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sel eukariotik memiliki membran inti yang membungkus materi genetiknya.",
+          "poin": 10
+        },
+        {
+          "no": 3,
+          "soal": "Jelaskan fungsi sistem pencernaan pada manusia!",
+          "kunci": "Sistem pencernaan berfungsi untuk mengolah makanan menjadi nutrisi yang dapat diserap tubuh. Proses pencernaan dimulai dari mulut kemudian melewati kerongkongan, lambung, usus halus, dan usus besar. Nutrisi diserap di usus halus dan sisa makanan dikeluarkan melalui anus.",
+          "poin": 10
+        },
+        {
+          "no": 4,
+          "soal": "Apa yang dimaksud dengan ekosistem dan sebutkan komponen-komponennya!",
+          "kunci": "Ekosistem adalah kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi. Komponen ekosistem terdiri dari komponen biotik yaitu makhluk hidup dan komponen abiotik yaitu benda mati seperti air, tanah, udara, dan cahaya matahari.",
+          "poin": 10
+        },
+        {
+          "no": 5,
+          "soal": "Jelaskan proses pernapasan pada manusia!",
+          "kunci": "Pernapasan adalah proses pertukaran gas oksigen dan karbondioksida. Udara masuk melalui hidung kemudian melewati tenggorokan menuju paru-paru. Di paru-paru terjadi pertukaran gas di alveolus, oksigen masuk ke darah dan karbondioksida dikeluarkan.",
+          "poin": 10
+        },
+        {
+          "no": 6,
+          "soal": "Jelaskan tentang rantai makanan dan jaring-jaring makanan!",
+          "kunci": "Rantai makanan adalah proses makan dan dimakan dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan oleh konsumen tingkat satu, konsumen tingkat satu dimakan konsumen tingkat dua, dan seterusnya. Jaring-jaring makanan adalah kumpulan rantai makanan yang saling berhubungan.",
+          "poin": 10
+        }
+      ]
+    },
+    "Paket 3 — Pendidikan Kewarganegaraan (PKN)": {
+      "subject": "PKN",
+      "questions": [
+        {
+          "no": 1,
+          "soal": "Sebutkan dan jelaskan nilai-nilai yang terkandung dalam Pancasila sila pertama!",
+          "kunci": "Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan toleransi beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaannya. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia.",
+          "poin": 10
+        },
+        {
+          "no": 2,
+          "soal": "Jelaskan sistem pemerintahan Indonesia berdasarkan UUD 1945!",
+          "kunci": "Indonesia menganut sistem pemerintahan presidensial berdasarkan UUD 1945. Presiden berkedudukan sebagai kepala negara sekaligus kepala pemerintahan. Kekuasaan negara dibagi menjadi tiga yaitu legislatif, eksekutif, dan yudikatif.",
+          "poin": 10
+        },
+        {
+          "no": 3,
+          "soal": "Apa yang dimaksud dengan demokrasi Pancasila?",
+          "kunci": "Demokrasi Pancasila adalah sistem demokrasi yang didasarkan pada nilai-nilai Pancasila. Kedaulatan berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Demokrasi Pancasila mengedepankan keseimbangan antara hak dan kewajiban warga negara.",
+          "poin": 10
+        },
+        {
+          "no": 4,
+          "soal": "Jelaskan hak dan kewajiban warga negara Indonesia!",
+          "kunci": "Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak. Kewajiban warga negara adalah membela negara, membayar pajak, dan menaati hukum serta peraturan yang berlaku.",
+          "poin": 10
+        },
+        {
+          "no": 5,
+          "soal": "Jelaskan pentingnya menjaga persatuan dan kesatuan bangsa Indonesia!",
+          "kunci": "Persatuan dan kesatuan bangsa Indonesia sangat penting karena Indonesia terdiri dari berbagai suku, agama, dan budaya. Persatuan menjaga keutuhan negara dari ancaman perpecahan. Dengan persatuan rakyat Indonesia dapat bekerja sama membangun bangsa yang lebih maju.",
+          "poin": 10
+        }
+      ]
+    }
+  },
+  "jawaban_siswa": {
+    "Andi Pratama": {
+      "Paket 1 — Sejarah Indonesia": [
+        "Proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno yang didampingi oleh Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur nomor 56 Jakarta. Naskah proklamasi diketik oleh Sayuti Melik berdasarkan tulisan tangan Soekarno.",
+        "Bangsa Eropa datang ke Indonesia karena mencari rempah-rempah yang sangat berharga di Eropa. Selain itu mereka juga ingin menyebarkan agama dan memperluas wilayah kekuasaan mereka. Semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.",
+        "Soekarno berperan sebagai tokoh utama pergerakan kemerdekaan Indonesia. Beliau mendirikan Partai Nasional Indonesia pada tahun 1927 untuk memperjuangkan kemerdekaan. Soekarno juga menjadi proklamator yang membacakan naskah proklamasi kemerdekaan Indonesia.",
+        "Sumpah Pemuda adalah ikrar yang diucapkan oleh para pemuda Indonesia pada tanggal 28 Oktober 1928. Isinya menyatakan satu tanah air yaitu Indonesia, satu bangsa yaitu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.",
+        "Rakyat Indonesia melawan penjajahan Belanda melalui perlawanan bersenjata dan diplomasi. Perlawanan bersenjata dilakukan oleh para pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien. Perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.",
+        "Pendudukan Jepang membawa dampak buruk bagi rakyat Indonesia. Rakyat dipaksa menjadi romusha yaitu pekerja paksa. Hasil pertanian dirampas untuk kepentingan perang Jepang sehingga rakyat mengalami kelaparan dan penderitaan yang sangat berat."
+      ],
+      "Paket 2 — Biologi": [
+        "Fotosintesis adalah proses pembuatan makanan oleh tumbuhan hijau dengan menggunakan cahaya matahari. Tumbuhan menyerap air dan karbondioksida lalu mengubahnya menjadi glukosa dan oksigen. Proses ini terjadi di dalam kloroplas yang mengandung klorofil.",
+        "Perbedaan utamanya terletak pada membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sedangkan sel eukariotik memiliki membran inti yang membungkus materi genetiknya.",
+        "Sistem pencernaan berfungsi untuk mengolah makanan menjadi nutrisi yang dapat diserap oleh tubuh. Proses pencernaan dimulai dari mulut lalu melewati kerongkongan, lambung, usus halus, dan usus besar. Nutrisi diserap di usus halus dan sisa makanan dikeluarkan melalui anus.",
+        "Ekosistem adalah kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi. Komponen ekosistem terdiri dari komponen biotik yaitu makhluk hidup dan komponen abiotik yaitu benda mati seperti air, tanah, udara, dan cahaya matahari.",
+        "Pernapasan adalah proses pertukaran gas oksigen dan karbondioksida dalam tubuh. Udara masuk melalui hidung kemudian melewati tenggorokan menuju paru-paru. Di paru-paru terjadi pertukaran gas di alveolus, oksigen masuk ke darah dan karbondioksida dikeluarkan.",
+        "Rantai makanan adalah proses makan dan dimakan dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan oleh konsumen tingkat satu, konsumen tingkat satu dimakan konsumen tingkat dua, dan seterusnya. Jaring-jaring makanan adalah kumpulan dari rantai makanan yang saling berhubungan."
+      ],
+      "Paket 3 — Pendidikan Kewarganegaraan (PKN)": [
+        "Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan toleransi dalam beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaannya masing-masing. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia.",
+        "Indonesia menganut sistem pemerintahan presidensial berdasarkan UUD 1945. Presiden berkedudukan sebagai kepala negara sekaligus kepala pemerintahan. Kekuasaan negara dibagi menjadi tiga cabang yaitu legislatif, eksekutif, dan yudikatif.",
+        "Demokrasi Pancasila adalah sistem demokrasi yang berlandaskan pada nilai-nilai Pancasila. Kedaulatan berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Demokrasi Pancasila mengedepankan keseimbangan antara hak dan kewajiban warga negara.",
+        "Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak. Kewajiban warga negara adalah membela negara, membayar pajak, dan menaati hukum serta peraturan yang berlaku di Indonesia.",
+        "Persatuan dan kesatuan bangsa Indonesia sangat penting karena Indonesia terdiri dari berbagai suku, agama, dan budaya yang beragam. Persatuan menjaga keutuhan negara dari ancaman perpecahan. Dengan persatuan rakyat Indonesia dapat bekerja sama membangun bangsa yang lebih maju."
+      ]
+    },
+    "Budi Santoso": {
+      "Paket 1 — Sejarah Indonesia": [
+        "Pada tanggal 17 Agustus 1945, proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno bersama Mohammad Hatta di Jalan Pegangsaan Timur 56 Jakarta. Sayuti Melik bertugas mengetik naskah proklamasi yang sebelumnya ditulis tangan oleh Soekarno sendiri.",
+        "Bangsa Eropa datang ke Indonesia dengan tujuan utama mencari rempah-rempah yang bernilai sangat berharga. Mereka juga ingin menyebarkan agama serta memperluas wilayah kekuasaan mereka. Tiga semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.",
+        "Dalam pergerakan kemerdekaan Indonesia, Soekarno berperan sebagai tokoh utama yang sangat penting. Pada tahun 1927, beliau mendirikan Partai Nasional Indonesia sebagai wadah memperjuangkan kemerdekaan. Soekarno juga dikenal sebagai proklamator yang membacakan naskah proklamasi.",
+        "Pada tanggal 28 Oktober 1928, para pemuda Indonesia mengucapkan ikrar yang dikenal sebagai Sumpah Pemuda. Isi Sumpah Pemuda menyatakan satu tanah air Indonesia, satu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.",
+        "Rakyat Indonesia melawan penjajahan Belanda dengan dua cara, yaitu perlawanan bersenjata dan diplomasi. Pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien melakukan perlawanan bersenjata. Sementara perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.",
+        "Pendudukan Jepang memberikan dampak buruk yang besar bagi rakyat Indonesia. Rakyat dijadikan romusha atau pekerja paksa oleh Jepang. Hasil pertanian juga dirampas untuk kepentingan perang sehingga rakyat mengalami kelaparan dan penderitaan hebat."
+      ],
+      "Paket 2 — Biologi": [
+        "Fotosintesis merupakan proses pembuatan makanan yang dilakukan oleh tumbuhan hijau dengan memanfaatkan cahaya matahari. Air dan karbondioksida diserap tumbuhan kemudian diubah menjadi glukosa dan oksigen. Proses fotosintesis ini berlangsung di kloroplas yang mengandung klorofil.",
+        "Perbedaan utama antara sel prokariotik dan sel eukariotik terletak pada membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sebaliknya sel eukariotik memiliki membran inti yang membungkus materi genetiknya dengan baik.",
+        "Sistem pencernaan memiliki fungsi mengolah makanan menjadi nutrisi yang dapat diserap oleh tubuh manusia. Proses pencernaan dimulai dari mulut, melewati kerongkongan, lambung, usus halus, dan usus besar secara berurutan. Nutrisi utama diserap di usus halus sedangkan sisa makanan dikeluarkan melalui anus.",
+        "Ekosistem merupakan kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi satu sama lain. Komponen ekosistem dibagi menjadi dua yaitu komponen biotik berupa makhluk hidup dan komponen abiotik berupa benda mati seperti air, tanah, udara, dan cahaya matahari.",
+        "Pernapasan merupakan proses pertukaran gas oksigen dan karbondioksida dalam tubuh manusia. Udara dihirup melalui hidung lalu melewati tenggorokan dan masuk ke paru-paru. Pertukaran gas terjadi di alveolus dimana oksigen masuk ke darah dan karbondioksida dikeluarkan dari tubuh.",
+        "Rantai makanan merupakan proses makan dan dimakan yang berlangsung dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan konsumen tingkat satu, lalu konsumen tingkat satu dimakan konsumen tingkat dua, begitu seterusnya. Jaring-jaring makanan terbentuk dari kumpulan rantai makanan yang saling berhubungan."
+      ],
+      "Paket 3 — Pendidikan Kewarganegaraan (PKN)": [
+        "Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan juga toleransi beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaan yang dianutnya. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia secara merata.",
+        "Berdasarkan UUD 1945, Indonesia menganut sistem pemerintahan presidensial. Presiden memiliki kedudukan sebagai kepala negara dan sekaligus kepala pemerintahan. Kekuasaan negara terbagi menjadi tiga bagian yaitu legislatif, eksekutif, dan yudikatif.",
+        "Demokrasi Pancasila merupakan sistem demokrasi yang didasarkan pada nilai-nilai Pancasila Indonesia. Kedaulatan tertinggi berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Sistem ini mengedepankan keseimbangan antara hak dan kewajiban warga negara.",
+        "Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak bagi kehidupannya. Adapun kewajiban warga negara meliputi membela negara, membayar pajak, serta menaati hukum dan peraturan yang berlaku.",
+        "Persatuan dan kesatuan bangsa Indonesia sangat penting mengingat Indonesia terdiri dari berbagai suku, agama, dan budaya yang beraneka ragam. Persatuan berperan menjaga keutuhan negara dari ancaman perpecahan internal. Dengan bersatu, rakyat Indonesia dapat bekerja sama membangun bangsa menjadi lebih maju."
+      ]
+    },
+    "Citra Dewi": {
+      "Paket 1 — Sejarah Indonesia": [
+        "Proklamasi kemerdekaan Indonesia terjadi pada tanggal 17 Agustus 1945. Soekarno dan Hatta membacakan proklamasi di Jakarta. Naskah proklamasi dibuat oleh para tokoh kemerdekaan.",
+        "Bangsa Eropa datang ke Indonesia untuk mencari rempah-rempah. Rempah-rempah seperti lada dan cengkeh sangat mahal di Eropa. Mereka juga ingin menguasai wilayah baru.",
+        "Soekarno adalah tokoh penting dalam kemerdekaan Indonesia. Beliau mendirikan partai untuk memperjuangkan kemerdekaan. Soekarno menjadi presiden pertama Indonesia.",
+        "Sumpah Pemuda terjadi pada tahun 1928. Para pemuda Indonesia bersumpah untuk bersatu. Mereka menyatakan satu nusa, satu bangsa, dan satu bahasa.",
+        "Indonesia melawan penjajahan Belanda dengan perlawanan bersenjata. Banyak pahlawan yang berjuang melawan Belanda. Perjuangan juga dilakukan melalui organisasi.",
+        "Penjajahan Jepang membuat rakyat Indonesia menderita. Banyak rakyat yang dijadikan pekerja paksa. Hasil pertanian diambil oleh Jepang."
+      ],
+      "Paket 2 — Biologi": [
+        "Fotosintesis adalah proses tumbuhan membuat makanan menggunakan cahaya matahari. Tumbuhan membutuhkan air dan karbondioksida. Hasil fotosintesis adalah glukosa dan oksigen.",
+        "Sel prokariotik tidak memiliki membran inti sedangkan sel eukariotik memiliki membran inti. Materi genetik pada prokariotik tersebar di sitoplasma. Contoh prokariotik adalah bakteri.",
+        "Sistem pencernaan manusia berfungsi mencerna makanan. Makanan masuk dari mulut dan diproses di lambung. Nutrisi diserap oleh tubuh di usus halus.",
+        "Ekosistem terdiri dari makhluk hidup dan lingkungannya. Ada komponen biotik dan abiotik dalam ekosistem. Komponen abiotik contohnya air dan tanah.",
+        "Pernapasan adalah proses mengambil oksigen dan mengeluarkan karbondioksida. Udara masuk melalui hidung ke paru-paru. Di paru-paru terjadi pertukaran gas.",
+        "Rantai makanan adalah urutan makan dan dimakan antara makhluk hidup. Dimulai dari produsen yaitu tumbuhan. Jaring-jaring makanan terdiri dari beberapa rantai makanan."
+      ],
+      "Paket 3 — Pendidikan Kewarganegaraan (PKN)": [
+        "Sila pertama Pancasila adalah Ketuhanan Yang Maha Esa. Setiap warga negara harus percaya kepada Tuhan. Indonesia menjamin kebebasan beragama.",
+        "Indonesia menggunakan sistem pemerintahan presidensial. Presiden adalah kepala negara dan kepala pemerintahan. Ada pembagian kekuasaan dalam pemerintahan.",
+        "Demokrasi Pancasila adalah demokrasi berdasarkan Pancasila. Keputusan diambil melalui musyawarah mufakat. Rakyat memiliki kedaulatan dalam negara.",
+        "Warga negara memiliki hak untuk mendapatkan pendidikan dan pekerjaan. Kewajiban warga negara adalah menaati hukum. Membayar pajak juga merupakan kewajiban.",
+        "Persatuan sangat penting bagi Indonesia yang beragam. Indonesia memiliki banyak suku dan budaya. Persatuan menjaga negara dari perpecahan."
+      ]
+    },
+    "Dimas Nugroho": {
+      "Paket 1 — Sejarah Indonesia": [
+        "Proklamasi kemerdekaan Indonesia terjadi pada 17 Agustus 1945 oleh Soekarno.",
+        "Bangsa Eropa datang ke Indonesia untuk mencari rempah-rempah.",
+        "Soekarno mendirikan partai politik dan menjadi proklamator kemerdekaan.",
+        "Sumpah Pemuda adalah janji pemuda Indonesia untuk bersatu pada tahun 1928.",
+        "Rakyat Indonesia melawan Belanda dengan perang dan diplomasi.",
+        "Jepang menjajah Indonesia dan membuat rakyat menderita sebagai romusha."
+      ],
+      "Paket 2 — Biologi": [
+        "Fotosintesis adalah tumbuhan membuat makanan dengan cahaya matahari.",
+        "Sel prokariotik tidak punya membran inti, sel eukariotik punya membran inti.",
+        "Sistem pencernaan mencerna makanan dari mulut sampai dibuang.",
+        "Ekosistem adalah tempat makhluk hidup berinteraksi dengan lingkungannya.",
+        "Pernapasan adalah menghirup oksigen dan mengeluarkan karbondioksida.",
+        "Rantai makanan adalah urutan makan dimakan dari tumbuhan ke hewan."
+      ],
+      "Paket 3 — Pendidikan Kewarganegaraan (PKN)": [
+        "Sila pertama tentang percaya kepada Tuhan Yang Maha Esa.",
+        "Indonesia pakai sistem presidensial, presiden jadi pemimpin negara.",
+        "Demokrasi Pancasila adalah demokrasi berdasarkan Pancasila dengan musyawarah.",
+        "Hak warga negara adalah pendidikan dan pekerjaan, kewajiban adalah bayar pajak.",
+        "Persatuan penting karena Indonesia terdiri dari banyak suku dan budaya."
+      ]
+    },
+    "Eka Putri": {
+      "Paket 1 — Sejarah Indonesia": [
+        "Proklamasi kemerdekaan terjadi di Bandung pada tahun 1950 oleh Mohammad Hatta seorang diri.",
+        "Bangsa Eropa datang ke Indonesia untuk berlibur dan menikmati keindahan alam. Mereka juga ingin belajar budaya Indonesia.",
+        "Soekarno adalah presiden kedua Indonesia yang membangun banyak jalan tol dan gedung bertingkat di Jakarta.",
+        "Sumpah Pemuda adalah acara olahraga yang diadakan setiap tahun di Jakarta untuk memperingati hari kemerdekaan.",
+        "Indonesia tidak pernah dijajah oleh negara manapun karena memiliki tentara yang sangat kuat sejak zaman dahulu.",
+        "Jepang membantu Indonesia membangun infrastruktur dan memberikan pendidikan gratis kepada seluruh rakyat Indonesia."
+      ],
+      "Paket 2 — Biologi": [
+        "Fotosintesis adalah proses hewan memakan tumbuhan untuk mendapatkan energi dan vitamin.",
+        "Sel prokariotik dan eukariotik sama saja, keduanya memiliki inti sel dan organel yang lengkap.",
+        "Sistem pencernaan berfungsi untuk mengalirkan darah ke seluruh tubuh manusia melalui jantung.",
+        "Ekosistem adalah kumpulan gedung dan bangunan di suatu kota yang saling terhubung.",
+        "Pernapasan adalah proses tubuh menghasilkan makanan dari udara yang dihirup manusia.",
+        "Rantai makanan adalah proses tumbuhan memakan hewan kecil untuk mendapatkan nutrisi."
+      ],
+      "Paket 3 — Pendidikan Kewarganegaraan (PKN)": [
+        "Sila pertama Pancasila adalah tentang keadilan sosial bagi seluruh rakyat Indonesia.",
+        "Indonesia menggunakan sistem kerajaan dimana raja memiliki kekuasaan penuh atas negara.",
+        "Demokrasi Pancasila adalah sistem dimana presiden memiliki kekuasaan mutlak tanpa perlu persetujuan rakyat.",
+        "Warga negara tidak memiliki kewajiban apapun, semua kebutuhan disediakan oleh pemerintah secara gratis.",
+        "Persatuan tidak diperlukan karena setiap daerah sebaiknya menjadi negara merdeka sendiri."
+      ]
+    }
+  }
+}

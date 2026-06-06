@@ -51,18 +51,21 @@ logger = logging.getLogger(__name__)
 # ============================================================
 # w1: Weight for SBERT sentence-level semantic similarity
 # w2: Weight for semantic keyword coverage (per-concept check)
-WEIGHT_SBERT = 0.7
-WEIGHT_KEYWORD = 0.3
+WEIGHT_SBERT = 0.60
+WEIGHT_KEYWORD = 0.40
 
 # Power curve exponent for final scoring
-# 1.5 = strict (penalizes partial correctness to prevent high scores for wrong meaning)
-# 1.0 = linear (strict proportional)
-SCORE_POWER = 1.5
+# 1.0 = linear (proportional, fair scoring)
+# Values > 1.0 penalize partial answers too aggressively
+SCORE_POWER = 1.0
 
 # Threshold for semantic keyword match (SBERT cosine similarity)
-# A concept segment is considered "matched" if sim >= this threshold
-# Increased from 0.82 to 0.85 because SBERT gives 0.825 for "zat hijau" vs "penopang"
-SEMANTIC_KEYWORD_THRESHOLD = 0.85
+# A concept segment gets PARTIAL credit (0.5) if sim >= this threshold
+SEMANTIC_KEYWORD_THRESHOLD = 0.72
+
+# Threshold for FULL credit on semantic keyword match
+# A concept segment gets FULL credit (1.0) if sim >= this threshold
+SEMANTIC_KEYWORD_FULL_CREDIT = 0.85
 
 # Try to import C bridge
 try:
@@ -158,21 +161,35 @@ def _split_into_concepts(text: str) -> List[str]:
             continue
 
         # For longer sentences, split on commas to get finer concepts
-        if len(sentence.split()) > 8:
+        if len(sentence.split()) > 10:
             parts = re.split(r',\s*', sentence)
             for part in parts:
                 part = part.strip()
-                # Filter out very short connector-only segments
-                if len(part.split()) >= 3:
+                # Require at least 4 words for a standalone concept
+                if len(part.split()) >= 4:
                     concepts.append(part)
                 elif concepts and len(part.split()) >= 1:
-                    # Append short fragments to previous concept
+                    # Merge short fragments into previous concept
                     concepts[-1] = concepts[-1] + ', ' + part
+                elif len(part.split()) >= 2:
+                    # Start a new concept even if short, will be merged later
+                    concepts.append(part)
         else:
-            if len(sentence.split()) >= 2:
+            if len(sentence.split()) >= 3:
                 concepts.append(sentence)
+            elif concepts and len(sentence.split()) >= 1:
+                # Merge very short sentences into previous concept
+                concepts[-1] = concepts[-1] + '. ' + sentence
 
-    return concepts if concepts else [text.strip()]
+    # Post-process: merge any remaining short concepts
+    merged = []
+    for concept in concepts:
+        if merged and len(concept.split()) < 4:
+            merged[-1] = merged[-1] + ', ' + concept
+        else:
+            merged.append(concept)
+
+    return merged if merged else [text.strip()]
 
 
 class EssayEvaluator:
@@ -203,9 +220,10 @@ class EssayEvaluator:
         Compute semantic keyword coverage by checking if each concept
         in the key answer is semantically present in the student answer.
 
-        Instead of exact token matching, this uses SBERT to check if
-        each concept segment from the key answer has a semantic match
-        in the student's full response.
+        Uses graduated scoring:
+            - sim >= SEMANTIC_KEYWORD_FULL_CREDIT (0.85): full credit (1.0)
+            - sim >= SEMANTIC_KEYWORD_THRESHOLD (0.72): partial credit (0.5)
+            - sim < SEMANTIC_KEYWORD_THRESHOLD: no credit (0.0)
 
         Args:
             key_text: Master key answer (original text)
@@ -214,7 +232,7 @@ class EssayEvaluator:
 
         Returns:
             (score, matched_concepts, missing_concepts)
-            score ∈ [0, 1]: ratio of concepts covered
+            score ∈ [0, 1]: weighted ratio of concepts covered
         """
         if not answer_text or not answer_text.strip():
             concepts = _split_into_concepts(key_text)
@@ -226,6 +244,7 @@ class EssayEvaluator:
 
         matched = []
         missing = []
+        total_credit = 0.0
 
         # Encode all concepts + the full answer in one batch for efficiency
         all_texts = concepts + [answer_text]
@@ -246,13 +265,19 @@ class EssayEvaluator:
             # Truncate concept text for display
             display_text = concept[:50] + ('...' if len(concept) > 50 else '')
 
-            if sim >= SEMANTIC_KEYWORD_THRESHOLD:
+            if sim >= SEMANTIC_KEYWORD_FULL_CREDIT:
+                # Full credit: strong semantic match
                 matched.append(display_text)
+                total_credit += 1.0
+            elif sim >= SEMANTIC_KEYWORD_THRESHOLD:
+                # Partial credit: moderate semantic match (paraphrase)
+                matched.append(display_text)
+                total_credit += 0.5
             else:
                 missing.append(display_text)
 
         total = len(concepts)
-        score = len(matched) / total if total > 0 else 0.0
+        score = total_credit / total if total > 0 else 0.0
 
         return score, matched, missing
 

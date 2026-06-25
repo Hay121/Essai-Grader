@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paket Soal Ujian — EssayGrader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2c5282;
+            --accent: #3182ce;
+            --accent-light: #63b3ed;
+            --bg: #ffffff;
+            --text: #1a202c;
+            --text-secondary: #4a5568;
+            --border: #e2e8f0;
+            --sejarah: #c53030;
+            --biologi: #2f855a;
+            --pkn: #2b6cb0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--bg);
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+        }
+
+        @media print {
+            body { padding: 0; max-width: none; }
+            @page { size: A4; margin: 20mm; }
+            .page-break { page-break-before: always; }
+            h1, h2, h3 { page-break-after: avoid; }
+        }
+
+        .cover {
+            text-align: center;
+            padding: 60px 20px;
+            border: 3px solid var(--primary);
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+
+        .cover h1 {
+            font-size: 28pt;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .cover .subtitle {
+            font-size: 14pt;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .cover .info {
+            font-size: 10pt;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .paket-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .paket-header h2 {
+            font-size: 16pt;
+            font-weight: 700;
+        }
+
+        .paket-header .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 9pt;
+            font-weight: 600;
+        }
+
+        .paket-sejarah .paket-header { background: var(--sejarah); }
+        .paket-biologi .paket-header { background: var(--biologi); }
+        .paket-pkn .paket-header { background: var(--pkn); }
+
+        .question-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin-bottom: 18px;
+            background: #fafbfc;
+        }
+
+        .question-number {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 10pt;
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 11pt;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .points-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 9pt;
+            font-weight: 600;
+        }
+
+        .answer-space {
+            border: 1px dashed #cbd5e0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 10px;
+            min-height: 60px;
+            background: white;
+        }
+
+        .answer-space p {
+            font-size: 9pt;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 2px solid var(--border);
+            font-size: 8.5pt;
+            color: var(--text-secondary);
+        }
+
+        .kunci-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fff4;
+            border: 2px solid #c6f6d5;
+            border-radius: 8px;
+        }
+
+        .kunci-section h3 {
+            color: #2f855a;
+            margin-bottom: 10px;
+        }
+
+        .kunci-item {
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #38a169;
+        }
+
+        .kunci-item .kunci-label {
+            font-weight: 700;
+            font-size: 9pt;
+            color: #2f855a;
+        }
+
+        .kunci-item .kunci-text {
+            font-size: 10pt;
+            color: var(--text);
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cover">
+        <h1>📝 Paket Soal Ujian</h1>
+        <div class="subtitle">EssayGrader — Sistem Penilaian Esai Otomatis</div>
+        <div class="info">
+            <strong>Mata Pelajaran:</strong> Sejarah Indonesia, Biologi, PKN<br>
+            <strong>Jumlah Paket:</strong> 3 paket soal<br>
+            <strong>Total Soal:</strong> 17 soal esai<br>
+            <strong>Waktu Pengerjaan:</strong> 90 menit per paket<br>
+            <br>
+            <em>Dokumen ini digenerate oleh sistem EssayGrader</em>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+    <div class="paket-sejarah">
+        <div class="paket-header">
+            <h2>Paket 1 — Sejarah Indonesia</h2>
+            <span class="badge">6 Soal · Mata Pelajaran: Sejarah</span>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 1 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan peristiwa proklamasi kemerdekaan Indonesia pada tanggal 17 Agustus 1945!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 2 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Sebutkan dan jelaskan latar belakang kedatangan bangsa Eropa ke Indonesia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 3 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan peran Soekarno dalam pergerakan kemerdekaan Indonesia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 4 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Apa yang dimaksud dengan Sumpah Pemuda dan kapan peristiwa itu terjadi?</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 5 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan perjuangan rakyat Indonesia melawan penjajahan Belanda!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 6 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Apa dampak pendudukan Jepang terhadap kehidupan rakyat Indonesia?</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="kunci-section">
+            <h3>🔑 Kunci Jawaban — Paket 1 — Sejarah Indonesia</h3>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 1 (10 poin)</div>
+                <div class="kunci-text">Proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno didampingi Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur nomor 56 Jakarta. Naskah proklamasi diketik oleh Sayuti Melik berdasarkan tulisan tangan Soekarno.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 2 (10 poin)</div>
+                <div class="kunci-text">Bangsa Eropa datang ke Indonesia karena mencari rempah-rempah yang sangat berharga di Eropa. Selain itu mereka ingin menyebarkan agama dan memperluas wilayah kekuasaan. Semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 3 (10 poin)</div>
+                <div class="kunci-text">Soekarno berperan sebagai tokoh utama pergerakan kemerdekaan Indonesia. Beliau mendirikan Partai Nasional Indonesia pada tahun 1927 untuk memperjuangkan kemerdekaan. Soekarno juga menjadi proklamator yang membacakan naskah proklamasi kemerdekaan.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 4 (10 poin)</div>
+                <div class="kunci-text">Sumpah Pemuda adalah ikrar yang diucapkan oleh para pemuda Indonesia pada tanggal 28 Oktober 1928. Isinya menyatakan satu tanah air yaitu Indonesia, satu bangsa yaitu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 5 (10 poin)</div>
+                <div class="kunci-text">Rakyat Indonesia melawan penjajahan Belanda melalui perlawanan bersenjata dan diplomasi. Perlawanan bersenjata dilakukan oleh para pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien. Perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 6 (10 poin)</div>
+                <div class="kunci-text">Pendudukan Jepang membawa dampak buruk bagi rakyat Indonesia. Rakyat dipaksa menjadi romusha atau pekerja paksa. Hasil pertanian dirampas untuk kepentingan perang Jepang sehingga rakyat mengalami kelaparan dan penderitaan.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+    <div class="paket-biologi">
+        <div class="paket-header">
+            <h2>Paket 2 — Biologi</h2>
+            <span class="badge">6 Soal · Mata Pelajaran: Biologi</span>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 1 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan proses fotosintesis pada tumbuhan hijau!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 2 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Apa perbedaan antara sel prokariotik dan sel eukariotik?</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 3 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan fungsi sistem pencernaan pada manusia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 4 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Apa yang dimaksud dengan ekosistem dan sebutkan komponen-komponennya!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 5 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan proses pernapasan pada manusia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 6 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan tentang rantai makanan dan jaring-jaring makanan!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="kunci-section">
+            <h3>🔑 Kunci Jawaban — Paket 2 — Biologi</h3>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 1 (10 poin)</div>
+                <div class="kunci-text">Fotosintesis adalah proses pembuatan makanan oleh tumbuhan hijau menggunakan cahaya matahari. Tumbuhan menyerap air dan karbondioksida lalu mengubahnya menjadi glukosa dan oksigen. Proses ini terjadi di kloroplas yang mengandung klorofil.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 2 (10 poin)</div>
+                <div class="kunci-text">Perbedaan utamanya adalah membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sel eukariotik memiliki membran inti yang membungkus materi genetiknya.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 3 (10 poin)</div>
+                <div class="kunci-text">Sistem pencernaan berfungsi untuk mengolah makanan menjadi nutrisi yang dapat diserap tubuh. Proses pencernaan dimulai dari mulut kemudian melewati kerongkongan, lambung, usus halus, dan usus besar. Nutrisi diserap di usus halus dan sisa makanan dikeluarkan melalui anus.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 4 (10 poin)</div>
+                <div class="kunci-text">Ekosistem adalah kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi. Komponen ekosistem terdiri dari komponen biotik yaitu makhluk hidup dan komponen abiotik yaitu benda mati seperti air, tanah, udara, dan cahaya matahari.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 5 (10 poin)</div>
+                <div class="kunci-text">Pernapasan adalah proses pertukaran gas oksigen dan karbondioksida. Udara masuk melalui hidung kemudian melewati tenggorokan menuju paru-paru. Di paru-paru terjadi pertukaran gas di alveolus, oksigen masuk ke darah dan karbondioksida dikeluarkan.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 6 (10 poin)</div>
+                <div class="kunci-text">Rantai makanan adalah proses makan dan dimakan dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan oleh konsumen tingkat satu, konsumen tingkat satu dimakan konsumen tingkat dua, dan seterusnya. Jaring-jaring makanan adalah kumpulan rantai makanan yang saling berhubungan.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+    <div class="paket-pkn">
+        <div class="paket-header">
+            <h2>Paket 3 — Pendidikan Kewarganegaraan (PKN)</h2>
+            <span class="badge">5 Soal · Mata Pelajaran: PKN</span>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 1 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Sebutkan dan jelaskan nilai-nilai yang terkandung dalam Pancasila sila pertama!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 2 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan sistem pemerintahan Indonesia berdasarkan UUD 1945!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 3 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Apa yang dimaksud dengan demokrasi Pancasila?</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 4 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan hak dan kewajiban warga negara Indonesia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-number">Soal 5 <span class="points-badge">10 poin</span></div>
+            <div class="question-text">Jelaskan pentingnya menjaga persatuan dan kesatuan bangsa Indonesia!</div>
+            <div class="answer-space">
+                <p>Tulis jawaban di sini...</p>
+            </div>
+        </div>
+
+        <div class="kunci-section">
+            <h3>🔑 Kunci Jawaban — Paket 3 — Pendidikan Kewarganegaraan (PKN)</h3>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 1 (10 poin)</div>
+                <div class="kunci-text">Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan toleransi beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaannya. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 2 (10 poin)</div>
+                <div class="kunci-text">Indonesia menganut sistem pemerintahan presidensial berdasarkan UUD 1945. Presiden berkedudukan sebagai kepala negara sekaligus kepala pemerintahan. Kekuasaan negara dibagi menjadi tiga yaitu legislatif, eksekutif, dan yudikatif.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 3 (10 poin)</div>
+                <div class="kunci-text">Demokrasi Pancasila adalah sistem demokrasi yang didasarkan pada nilai-nilai Pancasila. Kedaulatan berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Demokrasi Pancasila mengedepankan keseimbangan antara hak dan kewajiban warga negara.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 4 (10 poin)</div>
+                <div class="kunci-text">Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak. Kewajiban warga negara adalah membela negara, membayar pajak, dan menaati hukum serta peraturan yang berlaku.</div>
+            </div>
+
+            <div class="kunci-item">
+                <div class="kunci-label">Soal 5 (10 poin)</div>
+                <div class="kunci-text">Persatuan dan kesatuan bangsa Indonesia sangat penting karena Indonesia terdiri dari berbagai suku, agama, dan budaya. Persatuan menjaga keutuhan negara dari ancaman perpecahan. Dengan persatuan rakyat Indonesia dapat bekerja sama membangun bangsa yang lebih maju.</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>EssayGrader</strong> — Sistem Penilaian Esai Otomatis Berbasis Aljabar Linier</p>
+        <p>Dokumen digenerate secara otomatis · Jangan dibagikan kepada siswa</p>
+    </div>
+</body>
+</html>

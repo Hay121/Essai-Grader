@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Ujicoba Deteksi Kontradiksi Kompleks</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary: #1a365d;
+            --accent: #3182ce;
+            --bg: #ffffff;
+            --text: #1a202c;
+            --border: #e2e8f0;
+            --danger: #e53e3e;
+            --success: #38a169;
+            --warning: #d69e2e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+            background: var(--bg);
+        }
+
+        h1 { color: var(--primary); border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        h2 { color: var(--accent); margin-top: 30px; }
+        
+        .soal-card {
+            background: #f7fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kunci-box {
+            background: #ebf8ff;
+            border-left: 4px solid var(--accent);
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .test-case {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: white;
+        }
+
+        .badge-contradiction { background: var(--danger); }
+        .badge-entailment { background: var(--success); }
+        .badge-neutral { background: var(--warning); }
+
+        .answer-text { margin-bottom: 10px; font-style: italic; }
+        
+        .findings {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .finding-item { margin-bottom: 5px; }
+        .finding-type { font-weight: 600; color: var(--danger); }
+        
+        @media print {
+            body { padding: 0; }
+            .soal-card { page-break-inside: avoid; }
+            .test-case { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Laporan Ujicoba Deteksi Kontradiksi Kompleks</h1>
+    <p>Pengujian algoritma <em>Deep Semantic Contradiction Detection</em> pada 7 layer analisis baru.</p>
+
+    <div class="soal-card">
+        <h2>Soal 1 (Biologi)</h2>
+        <p><strong>Pertanyaan:</strong> Jelaskan peran fotosintesis dan respirasi dalam siklus karbon!</p>
+        <div class="kunci-box">
+            <strong>Kunci Jawaban:</strong><br>
+            Fotosintesis menyerap karbondioksida dan menghasilkan oksigen. Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida.
+        </div>
+        
+        <h3>Hasil Analisis Jawaban Siswa:</h3>
+
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Tepat / Parafrase</span>
+                <span class="badge badge-entailment">Verdict: ENTAILMENT</span>
+            </div>
+            <div class="answer-text">"Tumbuhan melakukan fotosintesis dengan mengambil karbondioksida lalu mengeluarkan oksigen. Sementara itu, proses respirasi membutuhkan oksigen dan mengeluarkan karbondioksida."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[PARAPHRASE]</span> Jawaban menggunakan kalimat berbeda (tumpang tindih kata: 27.8%) tanpa kontradiksi terdeteksi — kemungkinan parafrase valid</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Antonym Substitution (Fatal)</span>
+                <span class="badge badge-contradiction">Verdict: CONTRADICTION</span>
+            </div>
+            <div class="answer-text">"Fotosintesis menyerap karbondioksida dan menghabiskan oksigen. Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'menghasilkan' tetapi jawaban menggunakan antonimnya 'menghabiskan', membalik makna. Kunci: "Fotosintesis menyerap karbondioksida dan menghasilkan oksigen", Jawaban: "Fotosintesis menyerap karbondioksida dan menghabiskan oksigen"</li><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'fotosintesis' tetapi jawaban menggunakan antonimnya 'respirasi', membalik makna. Kunci: "Fotosintesis menyerap karbondioksida dan menghasilkan oksigen", Jawaban: "Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida"</li><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'respirasi' tetapi jawaban menggunakan antonimnya 'fotosintesis', membalik makna. Kunci: "Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida", Jawaban: "Fotosintesis menyerap karbondioksida dan menghabiskan oksigen"</li><li class="finding-item"><span class="finding-type">[CAUSAL_INVERSION]</span> Hubungan sebab-akibat terbalik: Kunci menyatakan 'Fotosintesis menyerap karbondioksida dan' menyebabkan 'oksigen', tetapi jawaban menyatakan 'Sebaliknya, respirasi menyerap oksigen dan' menyebabkan 'karbondioksida'</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Direction Reversal (Fatal)</span>
+                <span class="badge badge-contradiction">Verdict: CONTRADICTION</span>
+            </div>
+            <div class="answer-text">"Fotosintesis menyerap oksigen dan menghasilkan karbondioksida. Sebaliknya, respirasi menyerap karbondioksida dan menghasilkan oksigen."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'fotosintesis' tetapi jawaban menggunakan antonimnya 'respirasi', membalik makna. Kunci: "Fotosintesis menyerap karbondioksida dan menghasilkan oksigen", Jawaban: "Sebaliknya, respirasi menyerap karbondioksida dan menghasilkan oksigen"</li><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'respirasi' tetapi jawaban menggunakan antonimnya 'fotosintesis', membalik makna. Kunci: "Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida", Jawaban: "Fotosintesis menyerap oksigen dan menghasilkan karbondioksida"</li><li class="finding-item"><span class="finding-type">[CAUSAL_INVERSION]</span> Hubungan sebab-akibat terbalik: Kunci menyatakan 'Fotosintesis menyerap karbondioksida dan' menyebabkan 'oksigen', tetapi jawaban menyatakan 'Fotosintesis menyerap oksigen dan' menyebabkan 'karbondioksida'</li><li class="finding-item"><span class="finding-type">[CAUSAL_INVERSION]</span> Hubungan sebab-akibat terbalik: Kunci menyatakan 'Sebaliknya, respirasi menyerap oksigen dan' menyebabkan 'karbondioksida', tetapi jawaban menyatakan 'Sebaliknya, respirasi menyerap karbondioksida dan' menyebabkan 'oksigen'</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Implicit Negation (Fatal)</span>
+                <span class="badge badge-contradiction">Verdict: CONTRADICTION</span>
+            </div>
+            <div class="answer-text">"Fotosintesis dapat berlangsung tanpa menyerap karbondioksida dan tetap menghasilkan oksigen."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[NEGATION]</span> Negasi fatal: Jawaban menambahkan 'tanpa' yang membalik fakta. Kunci: "Fotosintesis menyerap karbondioksida dan menghasilkan oksigen", Jawaban: "Fotosintesis dapat berlangsung tanpa menyerap karbondioksida dan tetap menghasilkan oksigen"</li><li class="finding-item"><span class="finding-type">[NEGATION]</span> Negasi fatal: Jawaban menambahkan 'tanpa' yang membalik fakta. Kunci: "Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida", Jawaban: "Fotosintesis dapat berlangsung tanpa menyerap karbondioksida dan tetap menghasilkan oksigen"</li><li class="finding-item"><span class="finding-type">[ANTONYM_SUBSTITUTION]</span> Substitusi antonim: Kunci menggunakan 'respirasi' tetapi jawaban menggunakan antonimnya 'fotosintesis', membalik makna. Kunci: "Sebaliknya, respirasi menyerap oksigen dan menghasilkan karbondioksida", Jawaban: "Fotosintesis dapat berlangsung tanpa menyerap karbondioksida dan tetap menghasilkan oksigen"</li><li class="finding-item"><span class="finding-type">[CAUSAL_INVERSION]</span> Hubungan sebab-akibat terbalik: Kunci menyatakan 'Sebaliknya, respirasi menyerap oksigen dan' menyebabkan 'karbondioksida', tetapi jawaban menyatakan 'Fotosintesis dapat berlangsung tanpa menyerap karbondioksida dan tetap' menyebabkan 'oksigen'</li></ul></div></div></div>
+    <div class="soal-card">
+        <h2>Soal 2 (Sejarah)</h2>
+        <p><strong>Pertanyaan:</strong> Jelaskan hubungan sebab-akibat antara Perang Dunia 2 dan Kemerdekaan Indonesia!</p>
+        <div class="kunci-box">
+            <strong>Kunci Jawaban:</strong><br>
+            Kekalahan Jepang dalam Perang Dunia 2 menyebabkan terjadinya kekosongan kekuasaan (vacuum of power). Hal ini dimanfaatkan oleh para pemuda Indonesia untuk segera memproklamasikan kemerdekaan.
+        </div>
+        
+        <h3>Hasil Analisis Jawaban Siswa:</h3>
+
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Tepat / Parafrase</span>
+                <span class="badge badge-entailment">Verdict: ENTAILMENT</span>
+            </div>
+            <div class="answer-text">"Karena Jepang kalah di PD 2, terjadilah kekosongan kekuasaan di Indonesia. Kesempatan ini dipakai pemuda untuk mempercepat proklamasi kemerdekaan."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[PARAPHRASE]</span> Jawaban menggunakan kalimat berbeda (tumpang tindih kata: 27.3%) tanpa kontradiksi terdeteksi — kemungkinan parafrase valid</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Causal Inversion (Fatal)</span>
+                <span class="badge badge-neutral">Verdict: NEUTRAL</span>
+            </div>
+            <div class="answer-text">"Proklamasi kemerdekaan Indonesia oleh para pemuda menyebabkan kekalahan Jepang dalam Perang Dunia 2 dan terjadinya kekosongan kekuasaan."</div>
+</div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Temporal Inversion (Fatal)</span>
+                <span class="badge badge-neutral">Verdict: NEUTRAL</span>
+            </div>
+            <div class="answer-text">"Sesudah para pemuda memproklamasikan kemerdekaan, terjadilah kekalahan Jepang dalam Perang Dunia 2 yang memicu kekosongan kekuasaan."</div>
+</div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Role Inversion (Fatal)</span>
+                <span class="badge badge-neutral">Verdict: NEUTRAL</span>
+            </div>
+            <div class="answer-text">"Kekalahan Jepang dimanfaatkan oleh penjajah Belanda untuk segera memproklamasikan kemerdekaan."</div>
+</div></div>
+    <div class="soal-card">
+        <h2>Soal 3 (PKN)</h2>
+        <p><strong>Pertanyaan:</strong> Jelaskan hakikat kewajiban warga negara dalam membayar pajak!</p>
+        <div class="kunci-box">
+            <strong>Kunci Jawaban:</strong><br>
+            Semua warga negara yang telah memenuhi syarat wajib membayar pajak. Pajak merupakan kontribusi wajib kepada negara yang akan digunakan untuk kesejahteraan rakyat.
+        </div>
+        
+        <h3>Hasil Analisis Jawaban Siswa:</h3>
+
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Tepat / Parafrase</span>
+                <span class="badge badge-entailment">Verdict: ENTAILMENT</span>
+            </div>
+            <div class="answer-text">"Setiap warga yang memenuhi kriteria diharuskan membayar pajak. Dana pajak adalah sumbangan wajib bagi negara untuk mendanai kesejahteraan masyarakat."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[PARAPHRASE]</span> Jawaban menggunakan kalimat berbeda (tumpang tindih kata: 33.3%) tanpa kontradiksi terdeteksi — kemungkinan parafrase valid</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Quantifier Contradiction (Fatal)</span>
+                <span class="badge badge-contradiction">Verdict: CONTRADICTION</span>
+            </div>
+            <div class="answer-text">"Hanya beberapa warga negara yang telah memenuhi syarat wajib membayar pajak demi kesejahteraan rakyat."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[QUANTIFIER_CONTRADICTION]</span> Kuantitas terbalik: Kunci menggunakan 'semua' tetapi jawaban menggunakan 'beberapa' yang bermakna berlawanan. Kunci: "Semua warga negara yang telah memenuhi syarat wajib membayar pajak", Jawaban: "Hanya beberapa warga negara yang telah memenuhi syarat wajib membayar pajak demi kesejahteraan rakyat"</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Modal Contradiction (Fatal)</span>
+                <span class="badge badge-contradiction">Verdict: CONTRADICTION</span>
+            </div>
+            <div class="answer-text">"Semua warga negara yang telah memenuhi syarat boleh memilih untuk tidak membayar pajak karena sifatnya opsional."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[NEGATION]</span> Negasi fatal: Jawaban menambahkan 'tidak' yang membalik fakta. Kunci: "Semua warga negara yang telah memenuhi syarat wajib membayar pajak", Jawaban: "Semua warga negara yang telah memenuhi syarat boleh memilih untuk tidak membayar pajak karena sifatnya opsional"</li><li class="finding-item"><span class="finding-type">[MODAL_CONTRADICTION]</span> Modalitas terbalik: Kunci menggunakan 'wajib' tetapi jawaban menggunakan 'opsional' yang bermakna berlawanan. Kunci: "Semua warga negara yang telah memenuhi syarat wajib membayar pajak", Jawaban: "Semua warga negara yang telah memenuhi syarat boleh memilih untuk tidak membayar pajak karena sifatnya opsional"</li></ul></div></div>
+        <div class="test-case">
+            <div class="test-header">
+                <span>Kasus Uji: Deep Semantic Contradiction (Fatal)</span>
+                <span class="badge badge-entailment">Verdict: ENTAILMENT</span>
+            </div>
+            <div class="answer-text">"Warga negara bebas dari keharusan menyetorkan pajak kepada negara, karena kesejahteraan rakyat ditanggung pemerintah."</div>
+<div class="findings"><strong>Temuan:</strong><ul><li class="finding-item"><span class="finding-type">[PARAPHRASE]</span> Jawaban menggunakan kalimat berbeda (tumpang tindih kata: 24.0%) tanpa kontradiksi terdeteksi — kemungkinan parafrase valid</li></ul></div></div></div></body></html>

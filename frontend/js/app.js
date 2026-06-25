@@ -755,21 +755,62 @@ const App = (() => {
 
         // Step 4.5: Directional Semantic Analysis (Contradiction/Inversion)
         const s5b = process.step5b_semantic_analysis;
-        if (s5b && s5b.verdict !== 'NEUTRAL') {
+        if (s5b) {
             const isContra = s5b.verdict === 'CONTRADICTION';
+            const isEntail = s5b.verdict === 'ENTAILMENT';
+            const isNeutral = s5b.verdict === 'NEUTRAL';
+
+            let stepNumStyle, alertType, titleIcon, titleText;
+
+            if (isContra) {
+                stepNumStyle = 'background:var(--danger)';
+                alertType = 'error';
+                titleIcon = '⚠️';
+                titleText = 'Kontradiksi Makna / Inversi Terdeteksi';
+            } else if (isEntail) {
+                stepNumStyle = 'background:var(--success)';
+                alertType = 'success';
+                titleIcon = '✅';
+                titleText = 'Parafrase Valid Terdeteksi';
+            } else {
+                stepNumStyle = 'background:var(--primary)';
+                alertType = 'info';
+                titleIcon = '🔍';
+                titleText = 'Tidak Ditemukan Kontradiksi';
+            }
+
             html += `<div class="process-step">
                 <div class="process-step-header">
-                    <span class="process-step-num" style="background:${isContra ? 'var(--danger)' : 'var(--success)'}">!</span>
+                    <span class="process-step-num" style="${stepNumStyle}">!</span>
                     <span class="process-step-title">Analisis Arah Proses & Kontradiksi</span>
                 </div>
                 <div class="process-step-body">
-                    <div class="alert alert-${isContra ? 'error' : 'success'}" style="margin-bottom: 1rem; align-items: flex-start; flex-direction: column; gap: 0.25rem;">
+                    <div class="alert alert-${alertType}" style="margin-bottom: 1rem; align-items: flex-start; flex-direction: column; gap: 0.25rem;">
                         <strong style="font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                            ${isContra ? '⚠️ Kontradiksi Makna / Inversi Terdeteksi' : '✅ Parafrase Valid Terdeteksi'}
+                            ${titleIcon} ${titleText}
                         </strong>
                         <div style="font-size: 0.95rem; font-weight: 500; opacity: 0.9; margin-top: 0.25rem; width: 100%; text-align: left;">${escapeHtml(s5b.formula)}</div>
                     </div>
-                    ${s5b.details && s5b.details.length > 0 ? `
+                    ${isNeutral ? `
+                    <div class="process-calc-grid">
+                        <div class="process-calc-item" style="grid-column: span 2; border-left: 4px solid var(--primary);">
+                            <div class="process-calc-label">Hasil Analisis 7 Lapisan Deteksi</div>
+                            <div class="process-calc-value" style="font-size:0.9rem; font-weight:normal; margin-top:0.5rem; line-height:1.6">
+                                Sistem telah memeriksa 7 lapisan deteksi kontradiksi:<br>
+                                ✓ Lapisan 1 — Inversi Peran (Subject-Object Swap)<br>
+                                ✓ Lapisan 2 — Negasi (Multi-word & Implisit)<br>
+                                ✓ Lapisan 3 — Pembalikan Arah (Direction Reversal)<br>
+                                ✓ Lapisan 4 — Substitusi Antonim<br>
+                                ✓ Lapisan 5 — Inversi Kausal / Temporal<br>
+                                ✓ Lapisan 6 — Kontradiksi Kuantifier / Modal<br>
+                                ✓ Lapisan 7 — SBERT Deep Semantic<br>
+                                <br>
+                                <strong>Tidak ditemukan kontradiksi semantik.</strong> Skor tidak diubah.
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    ${!isNeutral && s5b.details && s5b.details.length > 0 ? `
                     <div class="process-calc-grid">
                         ${s5b.details.map(d => `
                             <div class="process-calc-item" style="grid-column: span 2; border-left: 4px solid ${isContra ? 'var(--danger)' : 'var(--success)'};">

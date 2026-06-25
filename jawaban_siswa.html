@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Jawaban Siswa — EssayGrader</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #1a365d;
+            --text: #1a202c;
+            --text-secondary: #4a5568;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 10pt;
+            line-height: 1.6;
+            color: var(--text);
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 15mm;
+        }
+
+        @media print {
+            body { padding: 0; max-width: none; }
+            @page { size: A4; margin: 15mm; }
+            .page-break { page-break-before: always; }
+        }
+
+        h1 {
+            font-size: 20pt;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .student-section {
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .student-header {
+            background: var(--primary);
+            color: white;
+            padding: 10px 18px;
+            font-size: 12pt;
+            font-weight: 700;
+        }
+
+        .paket-title {
+            background: #edf2f7;
+            padding: 8px 18px;
+            font-weight: 600;
+            font-size: 10pt;
+            color: var(--primary);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .answer-row {
+            padding: 8px 18px;
+            border-bottom: 1px solid #f7fafc;
+            font-size: 9.5pt;
+        }
+
+        .answer-row:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 9pt;
+        }
+
+        .answer-text {
+            margin-top: 2px;
+            color: var(--text);
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Lembar Jawaban Siswa</h1>
+
+    <div class="student-section">
+        <div class="student-header">👤 Andi Pratama</div>
+        <div class="paket-title">📦 Paket 1 — Sejarah Indonesia</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno yang didampingi oleh Mohammad Hatta pada tanggal 17 Agustus 1945 di Jalan Pegangsaan Timur nomor 56 Jakarta. Naskah proklamasi diketik oleh Sayuti Melik berdasarkan tulisan tangan Soekarno.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Bangsa Eropa datang ke Indonesia karena mencari rempah-rempah yang sangat berharga di Eropa. Selain itu mereka juga ingin menyebarkan agama dan memperluas wilayah kekuasaan mereka. Semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Soekarno berperan sebagai tokoh utama pergerakan kemerdekaan Indonesia. Beliau mendirikan Partai Nasional Indonesia pada tahun 1927 untuk memperjuangkan kemerdekaan. Soekarno juga menjadi proklamator yang membacakan naskah proklamasi kemerdekaan Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Sumpah Pemuda adalah ikrar yang diucapkan oleh para pemuda Indonesia pada tanggal 28 Oktober 1928. Isinya menyatakan satu tanah air yaitu Indonesia, satu bangsa yaitu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Rakyat Indonesia melawan penjajahan Belanda melalui perlawanan bersenjata dan diplomasi. Perlawanan bersenjata dilakukan oleh para pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien. Perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Pendudukan Jepang membawa dampak buruk bagi rakyat Indonesia. Rakyat dipaksa menjadi romusha yaitu pekerja paksa. Hasil pertanian dirampas untuk kepentingan perang Jepang sehingga rakyat mengalami kelaparan dan penderitaan yang sangat berat.</div>
+        </div>
+        <div class="paket-title">📦 Paket 2 — Biologi</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Fotosintesis adalah proses pembuatan makanan oleh tumbuhan hijau dengan menggunakan cahaya matahari. Tumbuhan menyerap air dan karbondioksida lalu mengubahnya menjadi glukosa dan oksigen. Proses ini terjadi di dalam kloroplas yang mengandung klorofil.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Perbedaan utamanya terletak pada membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sedangkan sel eukariotik memiliki membran inti yang membungkus materi genetiknya.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Sistem pencernaan berfungsi untuk mengolah makanan menjadi nutrisi yang dapat diserap oleh tubuh. Proses pencernaan dimulai dari mulut lalu melewati kerongkongan, lambung, usus halus, dan usus besar. Nutrisi diserap di usus halus dan sisa makanan dikeluarkan melalui anus.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Ekosistem adalah kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi. Komponen ekosistem terdiri dari komponen biotik yaitu makhluk hidup dan komponen abiotik yaitu benda mati seperti air, tanah, udara, dan cahaya matahari.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Pernapasan adalah proses pertukaran gas oksigen dan karbondioksida dalam tubuh. Udara masuk melalui hidung kemudian melewati tenggorokan menuju paru-paru. Di paru-paru terjadi pertukaran gas di alveolus, oksigen masuk ke darah dan karbondioksida dikeluarkan.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Rantai makanan adalah proses makan dan dimakan dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan oleh konsumen tingkat satu, konsumen tingkat satu dimakan konsumen tingkat dua, dan seterusnya. Jaring-jaring makanan adalah kumpulan dari rantai makanan yang saling berhubungan.</div>
+        </div>
+        <div class="paket-title">📦 Paket 3 — Pendidikan Kewarganegaraan (PKN)</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan toleransi dalam beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaannya masing-masing. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Indonesia menganut sistem pemerintahan presidensial berdasarkan UUD 1945. Presiden berkedudukan sebagai kepala negara sekaligus kepala pemerintahan. Kekuasaan negara dibagi menjadi tiga cabang yaitu legislatif, eksekutif, dan yudikatif.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Demokrasi Pancasila adalah sistem demokrasi yang berlandaskan pada nilai-nilai Pancasila. Kedaulatan berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Demokrasi Pancasila mengedepankan keseimbangan antara hak dan kewajiban warga negara.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak. Kewajiban warga negara adalah membela negara, membayar pajak, dan menaati hukum serta peraturan yang berlaku di Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Persatuan dan kesatuan bangsa Indonesia sangat penting karena Indonesia terdiri dari berbagai suku, agama, dan budaya yang beragam. Persatuan menjaga keutuhan negara dari ancaman perpecahan. Dengan persatuan rakyat Indonesia dapat bekerja sama membangun bangsa yang lebih maju.</div>
+        </div>
+    </div>
+
+    <div class="student-section">
+        <div class="student-header">👤 Budi Santoso</div>
+        <div class="paket-title">📦 Paket 1 — Sejarah Indonesia</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Pada tanggal 17 Agustus 1945, proklamasi kemerdekaan Indonesia dibacakan oleh Soekarno bersama Mohammad Hatta di Jalan Pegangsaan Timur 56 Jakarta. Sayuti Melik bertugas mengetik naskah proklamasi yang sebelumnya ditulis tangan oleh Soekarno sendiri.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Bangsa Eropa datang ke Indonesia dengan tujuan utama mencari rempah-rempah yang bernilai sangat berharga. Mereka juga ingin menyebarkan agama serta memperluas wilayah kekuasaan mereka. Tiga semangat ini dikenal dengan semboyan Gold, Glory, dan Gospel.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Dalam pergerakan kemerdekaan Indonesia, Soekarno berperan sebagai tokoh utama yang sangat penting. Pada tahun 1927, beliau mendirikan Partai Nasional Indonesia sebagai wadah memperjuangkan kemerdekaan. Soekarno juga dikenal sebagai proklamator yang membacakan naskah proklamasi.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Pada tanggal 28 Oktober 1928, para pemuda Indonesia mengucapkan ikrar yang dikenal sebagai Sumpah Pemuda. Isi Sumpah Pemuda menyatakan satu tanah air Indonesia, satu bangsa Indonesia, dan satu bahasa yaitu bahasa Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Rakyat Indonesia melawan penjajahan Belanda dengan dua cara, yaitu perlawanan bersenjata dan diplomasi. Pahlawan seperti Diponegoro, Imam Bonjol, dan Cut Nyak Dhien melakukan perlawanan bersenjata. Sementara perjuangan diplomasi dilakukan melalui organisasi pergerakan nasional.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Pendudukan Jepang memberikan dampak buruk yang besar bagi rakyat Indonesia. Rakyat dijadikan romusha atau pekerja paksa oleh Jepang. Hasil pertanian juga dirampas untuk kepentingan perang sehingga rakyat mengalami kelaparan dan penderitaan hebat.</div>
+        </div>
+        <div class="paket-title">📦 Paket 2 — Biologi</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Fotosintesis merupakan proses pembuatan makanan yang dilakukan oleh tumbuhan hijau dengan memanfaatkan cahaya matahari. Air dan karbondioksida diserap tumbuhan kemudian diubah menjadi glukosa dan oksigen. Proses fotosintesis ini berlangsung di kloroplas yang mengandung klorofil.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Perbedaan utama antara sel prokariotik dan sel eukariotik terletak pada membran inti. Sel prokariotik tidak memiliki membran inti sehingga materi genetiknya tersebar di sitoplasma. Sebaliknya sel eukariotik memiliki membran inti yang membungkus materi genetiknya dengan baik.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Sistem pencernaan memiliki fungsi mengolah makanan menjadi nutrisi yang dapat diserap oleh tubuh manusia. Proses pencernaan dimulai dari mulut, melewati kerongkongan, lambung, usus halus, dan usus besar secara berurutan. Nutrisi utama diserap di usus halus sedangkan sisa makanan dikeluarkan melalui anus.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Ekosistem merupakan kesatuan antara makhluk hidup dan lingkungannya yang saling berinteraksi satu sama lain. Komponen ekosistem dibagi menjadi dua yaitu komponen biotik berupa makhluk hidup dan komponen abiotik berupa benda mati seperti air, tanah, udara, dan cahaya matahari.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Pernapasan merupakan proses pertukaran gas oksigen dan karbondioksida dalam tubuh manusia. Udara dihirup melalui hidung lalu melewati tenggorokan dan masuk ke paru-paru. Pertukaran gas terjadi di alveolus dimana oksigen masuk ke darah dan karbondioksida dikeluarkan dari tubuh.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Rantai makanan merupakan proses makan dan dimakan yang berlangsung dalam urutan tertentu dari produsen ke konsumen. Produsen dimakan konsumen tingkat satu, lalu konsumen tingkat satu dimakan konsumen tingkat dua, begitu seterusnya. Jaring-jaring makanan terbentuk dari kumpulan rantai makanan yang saling berhubungan.</div>
+        </div>
+        <div class="paket-title">📦 Paket 3 — Pendidikan Kewarganegaraan (PKN)</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Sila pertama Pancasila yaitu Ketuhanan Yang Maha Esa mengandung nilai religius dan juga toleransi beragama. Setiap warga negara wajib percaya kepada Tuhan Yang Maha Esa sesuai agama dan kepercayaan yang dianutnya. Negara menjamin kebebasan beragama bagi seluruh rakyat Indonesia secara merata.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Berdasarkan UUD 1945, Indonesia menganut sistem pemerintahan presidensial. Presiden memiliki kedudukan sebagai kepala negara dan sekaligus kepala pemerintahan. Kekuasaan negara terbagi menjadi tiga bagian yaitu legislatif, eksekutif, dan yudikatif.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Demokrasi Pancasila merupakan sistem demokrasi yang didasarkan pada nilai-nilai Pancasila Indonesia. Kedaulatan tertinggi berada di tangan rakyat dan dilaksanakan melalui musyawarah untuk mufakat. Sistem ini mengedepankan keseimbangan antara hak dan kewajiban warga negara.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Warga negara Indonesia memiliki hak untuk mendapatkan pendidikan, pekerjaan, dan penghidupan yang layak bagi kehidupannya. Adapun kewajiban warga negara meliputi membela negara, membayar pajak, serta menaati hukum dan peraturan yang berlaku.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Persatuan dan kesatuan bangsa Indonesia sangat penting mengingat Indonesia terdiri dari berbagai suku, agama, dan budaya yang beraneka ragam. Persatuan berperan menjaga keutuhan negara dari ancaman perpecahan internal. Dengan bersatu, rakyat Indonesia dapat bekerja sama membangun bangsa menjadi lebih maju.</div>
+        </div>
+    </div>
+
+    <div class="student-section">
+        <div class="student-header">👤 Citra Dewi</div>
+        <div class="paket-title">📦 Paket 1 — Sejarah Indonesia</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Proklamasi kemerdekaan Indonesia terjadi pada tanggal 17 Agustus 1945. Soekarno dan Hatta membacakan proklamasi di Jakarta. Naskah proklamasi dibuat oleh para tokoh kemerdekaan.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Bangsa Eropa datang ke Indonesia untuk mencari rempah-rempah. Rempah-rempah seperti lada dan cengkeh sangat mahal di Eropa. Mereka juga ingin menguasai wilayah baru.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Soekarno adalah tokoh penting dalam kemerdekaan Indonesia. Beliau mendirikan partai untuk memperjuangkan kemerdekaan. Soekarno menjadi presiden pertama Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Sumpah Pemuda terjadi pada tahun 1928. Para pemuda Indonesia bersumpah untuk bersatu. Mereka menyatakan satu nusa, satu bangsa, dan satu bahasa.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Indonesia melawan penjajahan Belanda dengan perlawanan bersenjata. Banyak pahlawan yang berjuang melawan Belanda. Perjuangan juga dilakukan melalui organisasi.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Penjajahan Jepang membuat rakyat Indonesia menderita. Banyak rakyat yang dijadikan pekerja paksa. Hasil pertanian diambil oleh Jepang.</div>
+        </div>
+        <div class="paket-title">📦 Paket 2 — Biologi</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Fotosintesis adalah proses tumbuhan membuat makanan menggunakan cahaya matahari. Tumbuhan membutuhkan air dan karbondioksida. Hasil fotosintesis adalah glukosa dan oksigen.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Sel prokariotik tidak memiliki membran inti sedangkan sel eukariotik memiliki membran inti. Materi genetik pada prokariotik tersebar di sitoplasma. Contoh prokariotik adalah bakteri.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Sistem pencernaan manusia berfungsi mencerna makanan. Makanan masuk dari mulut dan diproses di lambung. Nutrisi diserap oleh tubuh di usus halus.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Ekosistem terdiri dari makhluk hidup dan lingkungannya. Ada komponen biotik dan abiotik dalam ekosistem. Komponen abiotik contohnya air dan tanah.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Pernapasan adalah proses mengambil oksigen dan mengeluarkan karbondioksida. Udara masuk melalui hidung ke paru-paru. Di paru-paru terjadi pertukaran gas.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Rantai makanan adalah urutan makan dan dimakan antara makhluk hidup. Dimulai dari produsen yaitu tumbuhan. Jaring-jaring makanan terdiri dari beberapa rantai makanan.</div>
+        </div>
+        <div class="paket-title">📦 Paket 3 — Pendidikan Kewarganegaraan (PKN)</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Sila pertama Pancasila adalah Ketuhanan Yang Maha Esa. Setiap warga negara harus percaya kepada Tuhan. Indonesia menjamin kebebasan beragama.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Indonesia menggunakan sistem pemerintahan presidensial. Presiden adalah kepala negara dan kepala pemerintahan. Ada pembagian kekuasaan dalam pemerintahan.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Demokrasi Pancasila adalah demokrasi berdasarkan Pancasila. Keputusan diambil melalui musyawarah mufakat. Rakyat memiliki kedaulatan dalam negara.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Warga negara memiliki hak untuk mendapatkan pendidikan dan pekerjaan. Kewajiban warga negara adalah menaati hukum. Membayar pajak juga merupakan kewajiban.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Persatuan sangat penting bagi Indonesia yang beragam. Indonesia memiliki banyak suku dan budaya. Persatuan menjaga negara dari perpecahan.</div>
+        </div>
+    </div>
+
+    <div class="student-section">
+        <div class="student-header">👤 Dimas Nugroho</div>
+        <div class="paket-title">📦 Paket 1 — Sejarah Indonesia</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Proklamasi kemerdekaan Indonesia terjadi pada 17 Agustus 1945 oleh Soekarno.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Bangsa Eropa datang ke Indonesia untuk mencari rempah-rempah.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Soekarno mendirikan partai politik dan menjadi proklamator kemerdekaan.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Sumpah Pemuda adalah janji pemuda Indonesia untuk bersatu pada tahun 1928.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Rakyat Indonesia melawan Belanda dengan perang dan diplomasi.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Jepang menjajah Indonesia dan membuat rakyat menderita sebagai romusha.</div>
+        </div>
+        <div class="paket-title">📦 Paket 2 — Biologi</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Fotosintesis adalah tumbuhan membuat makanan dengan cahaya matahari.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Sel prokariotik tidak punya membran inti, sel eukariotik punya membran inti.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Sistem pencernaan mencerna makanan dari mulut sampai dibuang.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Ekosistem adalah tempat makhluk hidup berinteraksi dengan lingkungannya.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Pernapasan adalah menghirup oksigen dan mengeluarkan karbondioksida.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Rantai makanan adalah urutan makan dimakan dari tumbuhan ke hewan.</div>
+        </div>
+        <div class="paket-title">📦 Paket 3 — Pendidikan Kewarganegaraan (PKN)</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Sila pertama tentang percaya kepada Tuhan Yang Maha Esa.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Indonesia pakai sistem presidensial, presiden jadi pemimpin negara.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Demokrasi Pancasila adalah demokrasi berdasarkan Pancasila dengan musyawarah.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Hak warga negara adalah pendidikan dan pekerjaan, kewajiban adalah bayar pajak.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Persatuan penting karena Indonesia terdiri dari banyak suku dan budaya.</div>
+        </div>
+    </div>
+
+    <div class="student-section">
+        <div class="student-header">👤 Eka Putri</div>
+        <div class="paket-title">📦 Paket 1 — Sejarah Indonesia</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Proklamasi kemerdekaan terjadi di Bandung pada tahun 1950 oleh Mohammad Hatta seorang diri.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Bangsa Eropa datang ke Indonesia untuk berlibur dan menikmati keindahan alam. Mereka juga ingin belajar budaya Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Soekarno adalah presiden kedua Indonesia yang membangun banyak jalan tol dan gedung bertingkat di Jakarta.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Sumpah Pemuda adalah acara olahraga yang diadakan setiap tahun di Jakarta untuk memperingati hari kemerdekaan.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Indonesia tidak pernah dijajah oleh negara manapun karena memiliki tentara yang sangat kuat sejak zaman dahulu.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Jepang membantu Indonesia membangun infrastruktur dan memberikan pendidikan gratis kepada seluruh rakyat Indonesia.</div>
+        </div>
+        <div class="paket-title">📦 Paket 2 — Biologi</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Fotosintesis adalah proses hewan memakan tumbuhan untuk mendapatkan energi dan vitamin.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Sel prokariotik dan eukariotik sama saja, keduanya memiliki inti sel dan organel yang lengkap.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Sistem pencernaan berfungsi untuk mengalirkan darah ke seluruh tubuh manusia melalui jantung.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Ekosistem adalah kumpulan gedung dan bangunan di suatu kota yang saling terhubung.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Pernapasan adalah proses tubuh menghasilkan makanan dari udara yang dihirup manusia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 6:</div>
+            <div class="answer-text">Rantai makanan adalah proses tumbuhan memakan hewan kecil untuk mendapatkan nutrisi.</div>
+        </div>
+        <div class="paket-title">📦 Paket 3 — Pendidikan Kewarganegaraan (PKN)</div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 1:</div>
+            <div class="answer-text">Sila pertama Pancasila adalah tentang keadilan sosial bagi seluruh rakyat Indonesia.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 2:</div>
+            <div class="answer-text">Indonesia menggunakan sistem kerajaan dimana raja memiliki kekuasaan penuh atas negara.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 3:</div>
+            <div class="answer-text">Demokrasi Pancasila adalah sistem dimana presiden memiliki kekuasaan mutlak tanpa perlu persetujuan rakyat.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 4:</div>
+            <div class="answer-text">Warga negara tidak memiliki kewajiban apapun, semua kebutuhan disediakan oleh pemerintah secara gratis.</div>
+        </div>
+        <div class="answer-row">
+            <div class="answer-label">Jawaban Soal 5:</div>
+            <div class="answer-text">Persatuan tidak diperlukan karena setiap daerah sebaiknya menjadi negara merdeka sendiri.</div>
+        </div>
+    </div>
+
+</body>
+</html>

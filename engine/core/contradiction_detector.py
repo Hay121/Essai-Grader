@@ -1,13 +1,18 @@
 """
-EssayGrader — Contradiction Detector Module (Directional Semantic Analysis)
-============================================================================
+EssayGrader — Contradiction Detector Module (Deep Semantic Analysis)
+=====================================================================
 Detects fatal semantic contradictions between a key answer and student answer
 that lexical matching (TF-IDF) and even SBERT cosine similarity would miss.
 
-Three Detection Layers:
+Seven Detection Layers:
     1. Role Inversion: Subject-Object swap ("A dijajah B" vs "B dijajah A")
     2. Negation Contradiction: Negation flipping facts ("perlu" vs "tidak perlu")
+       — Enhanced with multi-word negation and implicit negation detection
     3. Directional Reversal: Process direction swap ("X → Y" vs "Y → X")
+    4. Antonym Substitution: Keyword replaced by antonym ("naik" vs "turun")
+    5. Causal/Temporal Inversion: Cause-effect or time order reversed
+    6. Quantifier/Modal Contradiction: Scope or obligation flipped
+    7. SBERT Deep Semantic: Embedding-based contradiction for implicit cases
 
 Verdict System:
     CONTRADICTION: Fatal semantic error → score capped at 0.10
@@ -15,8 +20,9 @@ Verdict System:
     NEUTRAL:       No directional issue  → score unchanged
 
 Design:
-    Fully rule-based using Indonesian regex patterns.
-    No external ML dependencies — works in both SBERT and Fallback modes.
+    Layers 1–6 are rule-based using Indonesian regex patterns + lexical lookup.
+    Layer 7 uses SBERT embeddings (optional, graceful fallback if unavailable).
+    No required external ML dependencies — works in both SBERT and Fallback modes.
 
 References:
     Dagan, Glickman & Magnini (2005). "The PASCAL Recognising Textual Entailment Challenge."
@@ -25,7 +31,7 @@ References:
 
 import re
 import logging
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +53,28 @@ NEGATION_TOKENS = {
     'tidak', 'bukan', 'tanpa', 'belum', 'tak', 'jangan',
     'tiada', 'bukanlah', 'tidaklah', 'takkan', 'non', 'anti', 'nir',
 }
+
+# Multi-word negation phrases (detected as a unit)
+MULTIWORD_NEGATION = [
+    'tidak pernah', 'belum pernah', 'tidak bisa', 'tidak dapat',
+    'tidak mampu', 'tidak mungkin', 'tidak boleh', 'tidak perlu',
+    'tidak harus', 'belum tentu', 'belum bisa', 'belum dapat',
+    'tidak akan', 'tidak lagi', 'tidak ada', 'bukan merupakan',
+    'bukan termasuk', 'tanpa harus', 'tanpa perlu', 'tanpa adanya',
+    'bebas dari', 'terbebas dari', 'lepas dari', 'terlepas dari',
+    'jauh dari', 'terbatas pada',
+]
+
+# Implicit negation phrases — phrases that negate without using negation words
+IMPLICIT_NEGATION_PHRASES = [
+    ('dapat tumbuh tanpa', 'memerlukan'),
+    ('bisa hidup tanpa', 'membutuhkan'),
+    ('tidak bergantung pada', 'bergantung pada'),
+    ('bebas dari', 'terikat oleh'),
+    ('opsional', 'wajib'),
+    ('sukarela', 'wajib'),
+    ('pilihan', 'keharusan'),
+]
 
 # Passive voice markers (di- prefix verbs indicate Object-first structure)
 PASSIVE_MARKERS = re.compile(
@@ -91,8 +119,146 @@ ACTIVE_SVO_PATTERN = re.compile(
 
 # Penalty and boost constants
 CONTRADICTION_SCORE_CAP = 0.10
-ENTAILMENT_BOOST = 1.00  # Changed from 1.05 to avoid double-rewarding paraphrases (SBERT already rewards them)
+ENTAILMENT_BOOST = 1.05  # Restored to 1.05 so the UI visibly increases the score for valid paraphrases
 WARNING_PENALTY = 0.50
+
+
+# ============================================================
+# LAYER 4: Antonym Pairs Dictionary (100+ pairs)
+# ============================================================
+# Each tuple: (word_a, word_b) — using word_a in place of word_b
+# (or vice versa) reverses the meaning of a statement.
+ANTONYM_PAIRS = [
+    # --- Adjektiva Umum ---
+    ('besar', 'kecil'), ('tinggi', 'rendah'), ('panjang', 'pendek'),
+    ('luas', 'sempit'), ('tebal', 'tipis'), ('berat', 'ringan'),
+    ('cepat', 'lambat'), ('kuat', 'lemah'), ('keras', 'lunak'),
+    ('panas', 'dingin'), ('basah', 'kering'), ('terang', 'gelap'),
+    ('banyak', 'sedikit'), ('lebar', 'sempit'), ('dalam', 'dangkal'),
+    ('kasar', 'halus'), ('tajam', 'tumpul'), ('padat', 'renggang'),
+
+    # --- Adjektiva Abstrak ---
+    ('baik', 'buruk'), ('bagus', 'jelek'), ('benar', 'salah'),
+    ('positif', 'negatif'), ('untung', 'rugi'), ('sukses', 'gagal'),
+    ('berhasil', 'gagal'), ('mudah', 'sulit'), ('sederhana', 'kompleks'),
+    ('maju', 'mundur'), ('modern', 'kuno'), ('baru', 'lama'),
+    ('muda', 'tua'), ('hidup', 'mati'), ('sehat', 'sakit'),
+    ('aman', 'bahaya'), ('damai', 'perang'), ('kaya', 'miskin'),
+    ('mahal', 'murah'), ('rajin', 'malas'), ('pintar', 'bodoh'),
+    ('jujur', 'bohong'), ('adil', 'curang'), ('setia', 'khianat'),
+
+    # --- Verba/Aksi ---
+    ('naik', 'turun'), ('masuk', 'keluar'), ('datang', 'pergi'),
+    ('buka', 'tutup'), ('mulai', 'selesai'), ('hidup', 'mati'),
+    ('bangun', 'hancur'), ('tumbuh', 'menyusut'), ('muncul', 'hilang'),
+    ('menang', 'kalah'), ('maju', 'mundur'), ('dorong', 'tarik'),
+    ('tambah', 'kurang'), ('naik', 'turun'), ('meningkat', 'menurun'),
+    ('mempercepat', 'memperlambat'), ('memperbesar', 'memperkecil'),
+    ('membuat', 'menghancurkan'), ('membangun', 'merusak'),
+    ('menerima', 'menolak'), ('setuju', 'menolak'), ('menyetujui', 'menentang'),
+    ('mendukung', 'menentang'), ('mengizinkan', 'melarang'),
+    ('menguntungkan', 'merugikan'), ('membantu', 'menghambat'),
+    ('memperkuat', 'melemahkan'), ('menyatukan', 'memecah'),
+    ('menambah', 'mengurangi'), ('memproduksi', 'mengonsumsi'),
+    ('mengekspor', 'mengimpor'), ('mengirim', 'menerima'),
+    ('memberi', 'mengambil'), ('menyerap', 'melepaskan'),
+    ('menghasilkan', 'menghabiskan'), ('menyimpan', 'membuang'),
+    ('melindungi', 'menyerang'), ('mempertahankan', 'menyerahkan'),
+    ('menjajah', 'dijajah'),
+
+    # --- Sains / IPA ---
+    ('terbarukan', 'tak terbarukan'), ('organik', 'anorganik'),
+    ('biotik', 'abiotik'), ('aerob', 'anaerob'),
+    ('prokariotik', 'eukariotik'), ('autotrof', 'heterotrof'),
+    ('endoterm', 'eksoterm'), ('katabolisme', 'anabolisme'),
+    ('oksidasi', 'reduksi'), ('asam', 'basa'),
+    ('produsen', 'konsumen'), ('predator', 'mangsa'),
+    ('parasit', 'inang'), ('simbiosis', 'kompetisi'),
+    ('fotosintesis', 'respirasi'), ('inspirasi', 'ekspirasi'),
+    ('kondensasi', 'evaporasi'), ('mencair', 'membeku'),
+    ('menyerap', 'memantulkan'), ('menguap', 'mengembun'),
+
+    # --- IPS / Kenegaraan ---
+    ('demokrasi', 'otoriter'), ('merdeka', 'terjajah'),
+    ('penjajah', 'terjajah'), ('sentralisasi', 'desentralisasi'),
+    ('ekspansi', 'kontraksi'), ('inflasi', 'deflasi'),
+    ('surplus', 'defisit'), ('impor', 'ekspor'),
+    ('hak', 'kewajiban'), ('wajib', 'sukarela'),
+    ('legal', 'ilegal'), ('resmi', 'tidak resmi'),
+    ('persatuan', 'perpecahan'), ('toleransi', 'intoleransi'),
+    ('kemerdekaan', 'penjajahan'),
+
+    # --- Kata Sifat Ukuran / Kuantitas ---
+    ('mayoritas', 'minoritas'), ('maksimal', 'minimal'),
+    ('optimal', 'suboptimal'), ('lengkap', 'tidak lengkap'),
+    ('total', 'parsial'), ('absolut', 'relatif'),
+    ('permanen', 'sementara'), ('umum', 'khusus'),
+]
+
+# Build fast lookup sets from antonym pairs
+_ANTONYM_MAP: Dict[str, Set[str]] = {}
+for _a, _b in ANTONYM_PAIRS:
+    _a_lower, _b_lower = _a.lower(), _b.lower()
+    _ANTONYM_MAP.setdefault(_a_lower, set()).add(_b_lower)
+    _ANTONYM_MAP.setdefault(_b_lower, set()).add(_a_lower)
+
+
+# ============================================================
+# LAYER 5: Causal & Temporal Markers
+# ============================================================
+
+# Causal markers — words/phrases indicating cause-effect relationships
+CAUSAL_MARKERS = [
+    re.compile(r'(.+?)\s+(?:menyebabkan|mengakibatkan|memicu|menimbulkan|menghasilkan|membuat|menjadikan)\s+(.+)', re.IGNORECASE),
+    re.compile(r'(?:karena|sebab|akibat|lantaran|disebabkan)\s+(.+?)[,;]\s*(?:maka|sehingga|akibatnya|hasilnya)?\s*(.+)', re.IGNORECASE),
+    re.compile(r'(.+?)\s+(?:sehingga|akibatnya|maka|oleh karena itu|karenanya)\s+(.+)', re.IGNORECASE),
+    re.compile(r'(?:akibat|dampak|efek|konsekuensi|hasil)\s+(?:dari\s+)?(.+?)\s+(?:adalah|yaitu|ialah|berupa)\s+(.+)', re.IGNORECASE),
+]
+
+# Temporal markers — words indicating sequential ordering
+TEMPORAL_BEFORE_WORDS = {
+    'sebelum', 'sebelumnya', 'seprior', 'pra', 'mendahului',
+    'lebih dahulu', 'lebih dulu', 'terlebih dahulu',
+    'awalnya', 'mulanya', 'pada awalnya',
+}
+TEMPORAL_AFTER_WORDS = {
+    'sesudah', 'setelah', 'selepas', 'pasca', 'seusai',
+    'kemudian', 'selanjutnya', 'berikutnya', 'setelahnya',
+    'akhirnya', 'pada akhirnya',
+}
+
+# Temporal reversal patterns
+TEMPORAL_PATTERNS = [
+    re.compile(r'(sebelum|sebelumnya|pra|mendahului)\s+(.+?)[,;]\s*(.+)', re.IGNORECASE),
+    re.compile(r'(sesudah|setelah|selepas|pasca|seusai)\s+(.+?)[,;]\s*(.+)', re.IGNORECASE),
+    re.compile(r'(.+?)\s+(mendahului|mendahulukan|lebih dahulu dari(?:pada)?)\s+(.+)', re.IGNORECASE),
+    re.compile(r'(.+?)\s+(sebelum|sesudah|setelah)\s+(.+)', re.IGNORECASE),
+]
+
+
+# ============================================================
+# LAYER 6: Quantifier & Modal Groups
+# ============================================================
+
+# Quantifier contradiction pairs — group A contradicts group B
+QUANTIFIER_CONTRADICTIONS = [
+    ({'semua', 'seluruh', 'setiap', 'segala', 'segenap', 'tiap'},
+     {'tidak semua', 'hanya beberapa', 'sebagian', 'beberapa', 'hanya sebagian', 'tidak setiap', 'tidak seluruh'}),
+    ({'selalu', 'senantiasa', 'terus', 'selamanya', 'sepanjang waktu'},
+     {'tidak pernah', 'jarang', 'kadang', 'sesekali', 'tidak selalu', 'jarang sekali'}),
+    ({'pasti', 'tentu', 'pasti akan', 'sudah pasti'},
+     {'belum tentu', 'mungkin', 'tidak pasti', 'belum pasti'}),
+]
+
+# Modal contradiction pairs — obligation/permission reversed
+MODAL_CONTRADICTIONS = [
+    ({'wajib', 'harus', 'mesti', 'perlu', 'diharuskan', 'diwajibkan', 'diperlukan'},
+     {'tidak wajib', 'tidak harus', 'tidak perlu', 'opsional', 'sukarela', 'tidak diwajibkan', 'boleh tidak', 'bebas'}),
+    ({'boleh', 'diperbolehkan', 'diizinkan', 'diperkenankan', 'berhak'},
+     {'dilarang', 'tidak boleh', 'tidak diperbolehkan', 'tidak diizinkan', 'haram', 'terlarang', 'tidak berhak'}),
+    ({'mampu', 'bisa', 'dapat', 'sanggup', 'kapabel'},
+     {'tidak mampu', 'tidak bisa', 'tidak dapat', 'tidak sanggup', 'mustahil'}),
+]
 
 
 # ============================================================
@@ -157,6 +323,46 @@ def _extract_entities(text: str) -> List[str]:
                 seen.add(e_clean)
     
     return cleaned
+
+
+def _get_content_words(text: str, min_len: int = 3) -> Set[str]:
+    """Extract meaningful content words from normalized text, excluding negation tokens."""
+    tokens = _normalize_text(text).split()
+    return {t for t in tokens if t not in NEGATION_TOKENS and len(t) >= min_len}
+
+
+def _clause_topic_overlap(k_clause: str, a_clause: str, threshold: float = 0.45) -> Tuple[bool, float]:
+    """
+    Check if two clauses discuss the same topic via content word overlap.
+    Returns (is_same_topic, overlap_ratio).
+    """
+    k_content = _get_content_words(k_clause)
+    a_content = _get_content_words(a_clause)
+    if not k_content or not a_content:
+        return False, 0.0
+    overlap = len(k_content & a_content)
+    ratio = overlap / max(len(k_content), len(a_content))
+    return ratio >= threshold, ratio
+
+
+def _subjects_are_different(k_clause: str, a_clause: str) -> bool:
+    """
+    Check if two clauses discuss different subjects/entities.
+    Prevents false positives like "prokariotik tidak X" vs "eukariotik X".
+    """
+    k_content = _get_content_words(k_clause)
+    a_content = _get_content_words(a_clause)
+    if not k_content or not a_content:
+        return False
+
+    k_unique = k_content - a_content
+    a_unique = a_content - k_content
+
+    # If both have unique significant words (>= 4 chars), likely different subjects
+    k_sig = {w for w in k_unique if len(w) >= 4}
+    a_sig = {w for w in a_unique if len(w) >= 4}
+
+    return bool(k_sig and a_sig)
 
 
 # ============================================================
@@ -410,21 +616,22 @@ def _fuzzy_entity_match(entity1: str, entity2: str) -> bool:
 
 
 # ============================================================
-# DETECTOR 2: Negation Contradiction
+# DETECTOR 2: Negation Contradiction (ENHANCED)
 # ============================================================
 def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict]:
     """
     Detect if the student answer negates a core fact from the key.
     
+    ENHANCED version with:
+    - Multi-word negation detection ("tidak pernah", "belum bisa", etc.)
+    - Implicit negation phrases ("tanpa harus", "bebas dari", etc.)
+    - Double negation handling (two negations = positive, not contradiction)
+    - Subject consistency guard (different subjects ≠ contradiction)
+    
     Example:
         Key:    "Tumbuhan hijau memerlukan cahaya matahari"
         Answer: "Tumbuhan hijau tidak memerlukan cahaya matahari"
         → FATAL: Negation flips the fact
-    
-    Guards against false positives:
-        - Requires high content overlap (>55%) to ensure same-topic comparison
-        - Checks subject consistency to avoid cross-entity false matches
-          (e.g., "prokariotik tidak X" vs "eukariotik X" is NOT a contradiction)
     """
     findings = []
     
@@ -434,63 +641,40 @@ def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict
     for k_clause in key_clauses:
         k_norm = _normalize_text(k_clause)
         k_tokens = k_norm.split()
-        k_negations = [t for t in k_tokens if t in NEGATION_TOKENS]
-        k_has_negation = len(k_negations) > 0
+
+        # Count single-word negations
+        k_single_negs = [t for t in k_tokens if t in NEGATION_TOKENS]
+
+        # Count multi-word negations in the raw normalized text
+        k_multi_negs = [mw for mw in MULTIWORD_NEGATION if mw in k_norm]
+
+        # Effective negation count: multi-word phrases already contain the single
+        # token, so count them as the primary signal.  Each multi-word phrase
+        # counts as one negation unit.
+        k_neg_count = len(k_multi_negs) if k_multi_negs else len(k_single_negs)
+        k_has_negation = k_neg_count > 0
         
         for a_clause in ans_clauses:
             a_norm = _normalize_text(a_clause)
             a_tokens = a_norm.split()
-            a_negations = [t for t in a_tokens if t in NEGATION_TOKENS]
-            a_has_negation = len(a_negations) > 0
+
+            a_single_negs = [t for t in a_tokens if t in NEGATION_TOKENS]
+            a_multi_negs = [mw for mw in MULTIWORD_NEGATION if mw in a_norm]
+            a_neg_count = len(a_multi_negs) if a_multi_negs else len(a_single_negs)
+            a_has_negation = a_neg_count > 0
             
-            # Check if clauses are about the same topic (significant word overlap)
-            k_content = {t for t in k_tokens if t not in NEGATION_TOKENS and len(t) >= 3}
-            a_content = {t for t in a_tokens if t not in NEGATION_TOKENS and len(t) >= 3}
-            
-            if not k_content or not a_content:
+            # Require high topic overlap to ensure same-topic comparison
+            same_topic, overlap_ratio = _clause_topic_overlap(k_clause, a_clause, threshold=0.55)
+            if not same_topic:
                 continue
+
             
-            overlap = len(k_content & a_content)
-            overlap_ratio = overlap / max(len(k_content), len(a_content))
-            
-            # Require higher overlap (>55%) to ensure same-topic comparison
-            if overlap_ratio < 0.55:
-                continue
-            
-            # === SUBJECT CONSISTENCY CHECK ===
-            # If clauses discuss different subjects/entities, skip comparison
-            # This prevents false positives like:
-            #   Key: "Sel prokariotik TIDAK memiliki membran inti"
-            #   Ans: "Sel eukariotik memiliki membran inti"
-            # These are complementary facts about DIFFERENT subjects, not contradictions
-            k_non_overlap = k_content - a_content
-            a_non_overlap = a_content - k_content
-            
-            # If both clauses have unique content words, they may be about different subjects
-            # Especially in contrastive structures (e.g., prokariotik vs eukariotik)
-            if k_non_overlap and a_non_overlap:
-                # Check if the unique words are entity/subject differentiators
-                # (not just connecting words or style differences)
-                k_unique_significant = {w for w in k_non_overlap if len(w) >= 4}
-                a_unique_significant = {w for w in a_non_overlap if len(w) >= 4}
-                
-                if k_unique_significant and a_unique_significant:
-                    # Both clauses have unique significant words — likely different subjects
-                    # Example: "prokariotik" (unique to key clause) vs "eukariotik" (unique to answer clause)
-                    continue
-            
-            # Negation delta: one has negation, other doesn't
-            # (or different number of negations → odd means flipped)
-            k_neg_count = len(k_negations)
-            a_neg_count = len(a_negations)
+            # --- Check 1: Explicit negation delta ---
             neg_delta = abs(k_neg_count - a_neg_count)
             
             if neg_delta % 2 == 1:  # Odd delta = meaning flipped
-                # Determine which added/removed negation
                 if a_neg_count > k_neg_count:
-                    # Answer has MORE negations than key
-                    added_negs = [t for t in a_negations if t not in k_negations]
-                    neg_word = added_negs[0] if added_negs else a_negations[0]
+                    neg_word = a_multi_negs[0] if a_multi_negs else (a_single_negs[0] if a_single_negs else 'tidak')
                     findings.append({
                         'type': 'NEGATION',
                         'description': (
@@ -502,9 +686,7 @@ def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict
                         'confidence': 0.90,
                     })
                 elif k_neg_count > a_neg_count:
-                    # Key has MORE negations than answer
-                    removed_negs = [t for t in k_negations if t not in a_negations]
-                    neg_word = removed_negs[0] if removed_negs else k_negations[0]
+                    neg_word = k_multi_negs[0] if k_multi_negs else (k_single_negs[0] if k_single_negs else 'tidak')
                     findings.append({
                         'type': 'NEGATION',
                         'description': (
@@ -516,6 +698,38 @@ def _detect_negation_contradiction(key_text: str, answer_text: str) -> List[Dict
                         'severity': 'FATAL',
                         'confidence': 0.85,
                     })
+            
+            # --- Check 2: Implicit negation via antonym phrases ---
+            # Even without explicit negation tokens, certain phrase pairs contradict
+            # Example: "memerlukan cahaya" vs "dapat tumbuh tanpa cahaya"
+            if neg_delta == 0 and not findings:
+                for impl_neg, impl_pos in IMPLICIT_NEGATION_PHRASES:
+                    # Key uses positive form, answer uses implicit negation
+                    if impl_pos in k_norm and impl_neg in a_norm:
+                        findings.append({
+                            'type': 'NEGATION',
+                            'description': (
+                                f"Negasi implisit: Kunci menyatakan '{impl_pos}' "
+                                f"tetapi jawaban menggunakan '{impl_neg}' yang bermakna sebaliknya. "
+                                f"Kunci: \"{k_clause.strip()}\", "
+                                f"Jawaban: \"{a_clause.strip()}\""
+                            ),
+                            'severity': 'FATAL',
+                            'confidence': 0.80,
+                        })
+                    # Reverse: key uses negation, answer removes it
+                    elif impl_neg in k_norm and impl_pos in a_norm:
+                        findings.append({
+                            'type': 'NEGATION',
+                            'description': (
+                                f"Negasi implisit: Kunci menyatakan '{impl_neg}' "
+                                f"tetapi jawaban menggunakan '{impl_pos}' yang bermakna sebaliknya. "
+                                f"Kunci: \"{k_clause.strip()}\", "
+                                f"Jawaban: \"{a_clause.strip()}\""
+                            ),
+                            'severity': 'FATAL',
+                            'confidence': 0.80,
+                        })
     
     return findings
 
@@ -586,14 +800,459 @@ def _extract_directions(text: str) -> List[Tuple[str, str]]:
 
 
 # ============================================================
+# DETECTOR 4: Antonym Substitution (NEW)
+# ============================================================
+def _detect_antonym_contradiction(key_text: str, answer_text: str) -> List[Dict]:
+    """
+    Detect if the student answer replaces a keyword with its antonym.
+    
+    Example:
+        Key:    "Indonesia menggunakan energi terbarukan"
+        Answer: "Indonesia menggunakan energi tak terbarukan"
+        → FATAL: Antonym substitution reverses the meaning
+    
+    Example:
+        Key:    "Fotosintesis menghasilkan oksigen"
+        Answer: "Fotosintesis menghabiskan oksigen"
+        → FATAL: 'menghasilkan' ↔ 'menghabiskan' are antonyms
+    """
+    findings = []
+    
+    key_clauses = _extract_clauses(key_text)
+    ans_clauses = _extract_clauses(answer_text)
+    
+    for k_clause in key_clauses:
+        k_norm = _normalize_text(k_clause)
+        k_tokens = k_norm.split()
+        
+        for a_clause in ans_clauses:
+            a_norm = _normalize_text(a_clause)
+            a_tokens = a_norm.split()
+            
+            # Require same-topic overlap
+            same_topic, overlap_ratio = _clause_topic_overlap(k_clause, a_clause, threshold=0.45)
+            if not same_topic:
+                continue
+            
+            # Find antonym pairs between key and answer
+            antonym_hits = []
+            
+            # Single-token antonyms
+            k_set = set(k_tokens)
+            a_set = set(a_tokens)
+            
+            for k_tok in k_set:
+                if k_tok in _ANTONYM_MAP:
+                    for ant in _ANTONYM_MAP[k_tok]:
+                        if ant in a_set and ant not in k_set:
+                            # Found: key has word X, answer has antonym Y (and key doesn't also have Y)
+                            antonym_hits.append((k_tok, ant))
+            
+            # Multi-token antonym check (e.g., "tak terbarukan")
+            for (word_a, word_b) in ANTONYM_PAIRS:
+                wa, wb = word_a.lower(), word_b.lower()
+                # Check if key contains word_a and answer contains word_b (or vice versa)
+                if ' ' in wa or ' ' in wb:
+                    # Multi-word antonym
+                    if wa in k_norm and wb in a_norm and wa not in a_norm:
+                        antonym_hits.append((wa, wb))
+                    elif wb in k_norm and wa in a_norm and wb not in a_norm:
+                        antonym_hits.append((wb, wa))
+            
+            # Deduplicate
+            seen_pairs = set()
+            unique_hits = []
+            for (w1, w2) in antonym_hits:
+                pair_key = tuple(sorted([w1, w2]))
+                if pair_key not in seen_pairs:
+                    seen_pairs.add(pair_key)
+                    unique_hits.append((w1, w2))
+            
+            for (k_word, a_word) in unique_hits:
+                findings.append({
+                    'type': 'ANTONYM_SUBSTITUTION',
+                    'description': (
+                        f"Substitusi antonim: Kunci menggunakan '{k_word}' "
+                        f"tetapi jawaban menggunakan antonimnya '{a_word}', membalik makna. "
+                        f"Kunci: \"{k_clause.strip()}\", "
+                        f"Jawaban: \"{a_clause.strip()}\""
+                    ),
+                    'severity': 'FATAL',
+                    'confidence': 0.88,
+                })
+    
+    return findings
+
+
+# ============================================================
+# DETECTOR 5: Causal / Temporal Inversion (NEW)
+# ============================================================
+def _detect_causal_temporal_inversion(key_text: str, answer_text: str) -> List[Dict]:
+    """
+    Detect if the student answer reverses a cause-effect relationship
+    or inverts the temporal ordering of events.
+    
+    Example (Causal):
+        Key:    "Hujan menyebabkan banjir"
+        Answer: "Banjir menyebabkan hujan"
+        → FATAL: Cause and effect are swapped
+    
+    Example (Temporal):
+        Key:    "Sebelum merdeka, Indonesia dijajah Belanda"
+        Answer: "Sesudah merdeka, Indonesia dijajah Belanda"
+        → FATAL: Temporal relationship is inverted
+    """
+    findings = []
+    
+    # --- Part A: Causal Inversion ---
+    key_causal = _extract_causal_pairs(key_text)
+    ans_causal = _extract_causal_pairs(answer_text)
+    
+    for k_cause, k_effect in key_causal:
+        for a_cause, a_effect in ans_causal:
+            # Check if cause and effect are swapped
+            if (_fuzzy_entity_match(k_cause, a_effect) and
+                _fuzzy_entity_match(k_effect, a_cause)):
+                findings.append({
+                    'type': 'CAUSAL_INVERSION',
+                    'description': (
+                        f"Hubungan sebab-akibat terbalik: "
+                        f"Kunci menyatakan '{k_cause}' menyebabkan '{k_effect}', "
+                        f"tetapi jawaban menyatakan '{a_cause}' menyebabkan '{a_effect}'"
+                    ),
+                    'severity': 'FATAL',
+                    'confidence': 0.90,
+                })
+    
+    # --- Part B: Temporal Inversion ---
+    key_clauses = _extract_clauses(key_text)
+    ans_clauses = _extract_clauses(answer_text)
+    
+    for k_clause in key_clauses:
+        k_norm = _normalize_text(k_clause)
+        
+        # Check if key clause has a temporal marker
+        k_temporal_type = None  # 'before' or 'after'
+        k_temporal_word = None
+        
+        for word in TEMPORAL_BEFORE_WORDS:
+            if word in k_norm:
+                k_temporal_type = 'before'
+                k_temporal_word = word
+                break
+        
+        if not k_temporal_type:
+            for word in TEMPORAL_AFTER_WORDS:
+                if word in k_norm:
+                    k_temporal_type = 'after'
+                    k_temporal_word = word
+                    break
+        
+        if not k_temporal_type:
+            continue
+        
+        for a_clause in ans_clauses:
+            a_norm = _normalize_text(a_clause)
+            
+            # Require same-topic overlap
+            same_topic, _ = _clause_topic_overlap(k_clause, a_clause, threshold=0.40)
+            if not same_topic:
+                continue
+            
+            # Check if answer has the OPPOSITE temporal marker
+            a_temporal_type = None
+            a_temporal_word = None
+            
+            for word in TEMPORAL_BEFORE_WORDS:
+                if word in a_norm:
+                    a_temporal_type = 'before'
+                    a_temporal_word = word
+                    break
+            
+            if not a_temporal_type:
+                for word in TEMPORAL_AFTER_WORDS:
+                    if word in a_norm:
+                        a_temporal_type = 'after'
+                        a_temporal_word = word
+                        break
+            
+            if a_temporal_type and a_temporal_type != k_temporal_type:
+                findings.append({
+                    'type': 'TEMPORAL_INVERSION',
+                    'description': (
+                        f"Urutan waktu terbalik: "
+                        f"Kunci menggunakan '{k_temporal_word}' (bermakna {'sebelum' if k_temporal_type == 'before' else 'sesudah'}), "
+                        f"tetapi jawaban menggunakan '{a_temporal_word}' (bermakna {'sebelum' if a_temporal_type == 'before' else 'sesudah'}). "
+                        f"Kunci: \"{k_clause.strip()}\", "
+                        f"Jawaban: \"{a_clause.strip()}\""
+                    ),
+                    'severity': 'FATAL',
+                    'confidence': 0.88,
+                })
+    
+    return findings
+
+
+def _extract_causal_pairs(text: str) -> List[Tuple[str, str]]:
+    """
+    Extract (Cause, Effect) pairs from text using causal marker patterns.
+    """
+    pairs = []
+    clauses = _extract_clauses(text)
+    
+    for clause in clauses:
+        for pattern in CAUSAL_MARKERS:
+            match = pattern.search(clause)
+            if match:
+                cause = match.group(1).strip()
+                effect = match.group(2).strip()
+                # Clean
+                effect = re.split(
+                    r'\s+(?:dan|serta|selama|yang|untuk|dalam|pada)',
+                    effect, maxsplit=1
+                )[0].strip()
+                if len(cause) >= 2 and len(effect) >= 2:
+                    pairs.append((cause, effect))
+                break
+    
+    return pairs
+
+
+# ============================================================
+# DETECTOR 6: Quantifier / Modal Contradiction (NEW)
+# ============================================================
+def _detect_quantifier_modal_contradiction(key_text: str, answer_text: str) -> List[Dict]:
+    """
+    Detect if the student answer changes a quantifier or modal word
+    to its opposite, reversing the scope or obligation.
+    
+    Example (Quantifier):
+        Key:    "Semua warga negara wajib membayar pajak"
+        Answer: "Hanya beberapa warga negara wajib membayar pajak"
+        → FATAL: Quantifier "semua" → "hanya beberapa"
+    
+    Example (Modal):
+        Key:    "Warga negara wajib membayar pajak"
+        Answer: "Warga negara tidak perlu membayar pajak"
+        → FATAL: Modal "wajib" → "tidak perlu"
+    """
+    findings = []
+    
+    key_clauses = _extract_clauses(key_text)
+    ans_clauses = _extract_clauses(answer_text)
+    
+    for k_clause in key_clauses:
+        k_norm = _normalize_text(k_clause)
+        
+        for a_clause in ans_clauses:
+            a_norm = _normalize_text(a_clause)
+            
+            # Require same-topic overlap
+            same_topic, _ = _clause_topic_overlap(k_clause, a_clause, threshold=0.45)
+            if not same_topic:
+                continue
+            
+            # --- Check quantifier contradictions ---
+            for group_a, group_b in QUANTIFIER_CONTRADICTIONS:
+                k_has_a = any(q in k_norm for q in group_a)
+                k_has_b = any(q in k_norm for q in group_b)
+                a_has_a = any(q in a_norm for q in group_a)
+                a_has_b = any(q in a_norm for q in group_b)
+                
+                k_quant_a = next((q for q in group_a if q in k_norm), None)
+                k_quant_b = next((q for q in group_b if q in k_norm), None)
+                a_quant_a = next((q for q in group_a if q in a_norm), None)
+                a_quant_b = next((q for q in group_b if q in a_norm), None)
+                
+                if k_has_a and a_has_b and not k_has_b:
+                    findings.append({
+                        'type': 'QUANTIFIER_CONTRADICTION',
+                        'description': (
+                            f"Kuantitas terbalik: Kunci menggunakan '{k_quant_a}' "
+                            f"tetapi jawaban menggunakan '{a_quant_b}' yang bermakna berlawanan. "
+                            f"Kunci: \"{k_clause.strip()}\", "
+                            f"Jawaban: \"{a_clause.strip()}\""
+                        ),
+                        'severity': 'FATAL',
+                        'confidence': 0.88,
+                    })
+                elif k_has_b and a_has_a and not k_has_a:
+                    findings.append({
+                        'type': 'QUANTIFIER_CONTRADICTION',
+                        'description': (
+                            f"Kuantitas terbalik: Kunci menggunakan '{k_quant_b}' "
+                            f"tetapi jawaban menggunakan '{a_quant_a}' yang bermakna berlawanan. "
+                            f"Kunci: \"{k_clause.strip()}\", "
+                            f"Jawaban: \"{a_clause.strip()}\""
+                        ),
+                        'severity': 'FATAL',
+                        'confidence': 0.88,
+                    })
+            
+            # --- Check modal contradictions ---
+            for group_a, group_b in MODAL_CONTRADICTIONS:
+                k_has_a = any(m in k_norm for m in group_a)
+                k_has_b = any(m in k_norm for m in group_b)
+                a_has_a = any(m in a_norm for m in group_a)
+                a_has_b = any(m in a_norm for m in group_b)
+                
+                k_modal_a = next((m for m in group_a if m in k_norm), None)
+                k_modal_b = next((m for m in group_b if m in k_norm), None)
+                a_modal_a = next((m for m in group_a if m in a_norm), None)
+                a_modal_b = next((m for m in group_b if m in a_norm), None)
+                
+                if k_has_a and a_has_b and not k_has_b:
+                    findings.append({
+                        'type': 'MODAL_CONTRADICTION',
+                        'description': (
+                            f"Modalitas terbalik: Kunci menggunakan '{k_modal_a}' "
+                            f"tetapi jawaban menggunakan '{a_modal_b}' yang bermakna berlawanan. "
+                            f"Kunci: \"{k_clause.strip()}\", "
+                            f"Jawaban: \"{a_clause.strip()}\""
+                        ),
+                        'severity': 'FATAL',
+                        'confidence': 0.85,
+                    })
+                elif k_has_b and a_has_a and not k_has_a:
+                    findings.append({
+                        'type': 'MODAL_CONTRADICTION',
+                        'description': (
+                            f"Modalitas terbalik: Kunci menggunakan '{k_modal_b}' "
+                            f"tetapi jawaban menggunakan '{a_modal_a}' yang bermakna berlawanan. "
+                            f"Kunci: \"{k_clause.strip()}\", "
+                            f"Jawaban: \"{a_clause.strip()}\""
+                        ),
+                        'severity': 'FATAL',
+                        'confidence': 0.85,
+                    })
+    
+    return findings
+
+
+# ============================================================
+# DETECTOR 7: SBERT Deep Semantic Contradiction (NEW)
+# ============================================================
+def _detect_deep_semantic_contradiction(key_text: str, answer_text: str) -> List[Dict]:
+    """
+    Use SBERT embeddings to detect contradictions that escape rule-based
+    detectors.  Strategy:
+    
+    1. Compute clause-level similarity between key and answer clauses.
+    2. For clause pairs with HIGH surface similarity (>0.70) but that
+       contain known semantic reversal signals (negation, antonym, direction
+       word inversion), flag as contradiction.
+    3. For clause pairs where answer clause embedding is CLOSER to a
+       negated version of the key clause than to the key clause itself,
+       flag as deep semantic contradiction.
+    
+    This detector gracefully returns [] when SBERT is unavailable.
+    """
+    findings = []
+    
+    # Attempt to import semantic model
+    try:
+        from .semantic_model import SemanticModel
+        model = SemanticModel.get_instance()
+        if not model.is_available:
+            return []
+    except Exception:
+        return []
+    
+    key_clauses = _extract_clauses(key_text)
+    ans_clauses = _extract_clauses(answer_text)
+    
+    if not key_clauses or not ans_clauses:
+        return []
+    
+    # Strategy: For each key clause, create a negated version, then
+    # check if the answer clause is semantically closer to the negated
+    # version than to the original.
+    negation_prefixes = ['Tidak benar bahwa ', 'Bukan berarti bahwa ']
+    
+    for k_clause in key_clauses:
+        k_clause_clean = k_clause.strip()
+        if len(k_clause_clean.split()) < 4:
+            continue
+        
+        # Create negated versions of the key clause
+        negated_versions = [
+            f"{prefix}{k_clause_clean.lower()}" for prefix in negation_prefixes
+        ]
+        
+        # Batch encode: [original_key, negated_key1, negated_key2, answer_clauses...]
+        all_texts = [k_clause_clean] + negated_versions + [c.strip() for c in ans_clauses]
+        
+        try:
+            import numpy as np
+            vectors = model.encode_batch(all_texts)
+            if vectors is None:
+                continue
+            
+            k_vec = vectors[0]
+            neg_vecs = vectors[1:1 + len(negated_versions)]
+            ans_vecs = vectors[1 + len(negated_versions):]
+            
+            for i, a_clause in enumerate(ans_clauses):
+                a_vec = ans_vecs[i]
+                
+                # Similarity to original key clause
+                sim_original = float(np.dot(k_vec, a_vec))
+                sim_original = max(0.0, min(1.0, sim_original))
+                
+                # Similarity to negated key clause (take max across negation variants)
+                sim_negated = max(
+                    float(np.dot(neg_vec, a_vec)) for neg_vec in neg_vecs
+                )
+                sim_negated = max(0.0, min(1.0, sim_negated))
+                
+                # Contradiction signal: answer is closer to the negated meaning
+                # than to the original, AND both similarities are reasonably high
+                # (indicating the topic is the same, just direction is flipped)
+                margin = sim_negated - sim_original
+                
+                if (margin > 0.04 and 
+                    sim_negated > 0.55 and 
+                    sim_original > 0.35 and
+                    sim_original < 0.80):
+                    # Double-check with topic overlap to avoid noise
+                    same_topic, overlap = _clause_topic_overlap(k_clause, a_clause, threshold=0.30)
+                    if same_topic:
+                        findings.append({
+                            'type': 'DEEP_SEMANTIC_CONTRADICTION',
+                            'description': (
+                                f"Kontradiksi semantik mendalam: Jawaban secara makna lebih dekat ke negasi kunci "
+                                f"(sim_negasi={sim_negated:.3f}) daripada ke kunci asli (sim_asli={sim_original:.3f}). "
+                                f"Kunci: \"{k_clause_clean}\", "
+                                f"Jawaban: \"{a_clause.strip()}\""
+                            ),
+                            'severity': 'FATAL',
+                            'confidence': round(min(0.85, 0.70 + margin), 2),
+                        })
+        except Exception as e:
+            logger.warning(f"[CONTRADICTION] SBERT deep analysis error: {e}")
+            continue
+    
+    return findings
+
+
+# ============================================================
 # MAIN: Contradiction Analysis Engine
 # ============================================================
 class ContradictionDetector:
     """
-    Directional Semantic Analysis engine for detecting fatal contradictions.
+    Deep Semantic Analysis engine for detecting fatal contradictions.
     
     Acts as a post-scoring penalty/bonus layer on top of the existing
     hybrid (SBERT + TF-IDF) scoring pipeline.
+    
+    Seven detection layers:
+        1. Role Inversion (Subject-Object swap)
+        2. Negation Contradiction (enhanced with multi-word + implicit)
+        3. Direction Reversal (process direction swap)
+        4. Antonym Substitution (keyword replaced by antonym)
+        5. Causal / Temporal Inversion (cause-effect or time order swap)
+        6. Quantifier / Modal Contradiction (scope or obligation flip)
+        7. SBERT Deep Semantic (embedding-based implicit contradiction)
     
     Usage:
         detector = ContradictionDetector()
@@ -607,6 +1266,10 @@ class ContradictionDetector:
             ('role_inversion', _detect_role_inversion),
             ('negation', _detect_negation_contradiction),
             ('direction_reversal', _detect_direction_reversal),
+            ('antonym_substitution', _detect_antonym_contradiction),
+            ('causal_temporal', _detect_causal_temporal_inversion),
+            ('quantifier_modal', _detect_quantifier_modal_contradiction),
+            ('deep_semantic', _detect_deep_semantic_contradiction),
         ]
     
     def analyze(self, key_text: str, answer_text: str) -> Dict:
@@ -642,6 +1305,9 @@ class ContradictionDetector:
                 logger.warning(
                     f"[CONTRADICTION] Detector '{detector_name}' error: {e}"
                 )
+        
+        # Deduplicate findings by description similarity
+        all_findings = self._deduplicate_findings(all_findings)
         
         # Count severities
         fatal_count = sum(1 for f in all_findings if f.get('severity') == 'FATAL')
@@ -680,6 +1346,25 @@ class ContradictionDetector:
             'fatal_count': fatal_count,
             'warning_count': warning_count,
         }
+    
+    def _deduplicate_findings(self, findings: List[Dict]) -> List[Dict]:
+        """Remove duplicate or overlapping findings."""
+        if len(findings) <= 1:
+            return findings
+        
+        unique = []
+        seen_descriptions = set()
+        
+        for f in findings:
+            desc = f.get('description', '')
+            # Create a simplified key for deduplication
+            # (same type + same key/answer clause pair = likely duplicate)
+            desc_key = (f.get('type', ''), desc[:80])
+            if desc_key not in seen_descriptions:
+                seen_descriptions.add(desc_key)
+                unique.append(f)
+        
+        return unique
     
     def _check_entailment(self, key_text: str, answer_text: str) -> Dict:
         """

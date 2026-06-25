@@ -17,14 +17,14 @@
   {
     "student": "Budi Santoso",
     "paket": "Paket 1 — Sejarah Indonesia",
-    "avg": 78.6,
+    "avg": 77.2,
     "target": "65-100%",
     "status": "PASS",
     "scores": [
       65.0,
       75.0,
       79.7,
-      84.6,
+      76.5,
       87.0,
       80.1
     ]
@@ -32,16 +32,16 @@
   {
     "student": "Citra Dewi",
     "paket": "Paket 1 — Sejarah Indonesia",
-    "avg": 44.1,
+    "avg": 45.9,
     "target": "50-80%",
     "status": "OK~",
     "scores": [
       40.6,
-      34.3,
-      47.5,
-      51.1,
-      49.2,
-      41.7
+      36.0,
+      49.9,
+      53.7,
+      51.7,
+      43.8
     ]
   },
   {
@@ -62,15 +62,15 @@
   {
     "student": "Eka Putri",
     "paket": "Paket 1 — Sejarah Indonesia",
-    "avg": 10.8,
+    "avg": 11.0,
     "target": "0-35%",
     "status": "PASS",
     "scores": [
       13.8,
-      17.5,
-      7.9,
-      6.4,
-      5.1,
+      18.3,
+      8.3,
+      6.7,
+      5.3,
       13.9
     ]
   },
@@ -82,8 +82,8 @@
     "status": "PASS",
     "scores": [
       100.0,
-      90.3,
-      91.8,
+      90.4,
+      91.9,
       100.0,
       95.7,
       100.0
@@ -92,61 +92,61 @@
   {
     "student": "Budi Santoso",
     "paket": "Paket 2 — Biologi",
-    "avg": 76.6,
+    "avg": 76.7,
     "target": "65-100%",
     "status": "PASS",
     "scores": [
       62.3,
-      90.4,
-      79.6,
+      90.5,
+      79.8,
       71.3,
       69.0,
-      87.3
+      87.5
     ]
   },
   {
     "student": "Citra Dewi",
     "paket": "Paket 2 — Biologi",
-    "avg": 54.6,
+    "avg": 55.6,
     "target": "50-80%",
     "status": "PASS",
     "scores": [
       49.9,
-      67.4,
-      54.8,
+      70.8,
+      55.7,
       59.1,
       61.9,
-      34.2
+      36.1
     ]
   },
   {
     "student": "Dimas Nugroho",
     "paket": "Paket 2 — Biologi",
-    "avg": 29.6,
+    "avg": 30.7,
     "target": "30-60%",
-    "status": "OK~",
+    "status": "PASS",
     "scores": [
       36.0,
-      38.4,
-      23.7,
+      40.8,
+      27.3,
       34.2,
       18.3,
-      26.9
+      27.5
     ]
   },
   {
     "student": "Eka Putri",
     "paket": "Paket 2 — Biologi",
-    "avg": 15.8,
+    "avg": 16.2,
     "target": "0-35%",
     "status": "PASS",
     "scores": [
-      17.6,
-      26.9,
-      11.9,
+      13.2,
+      29.8,
+      11.8,
       9.3,
       11.1,
-      18.0
+      21.9
     ]
   },
   {
@@ -170,7 +170,7 @@
     "target": "65-100%",
     "status": "PASS",
     "scores": [
-      84.2,
+      84.4,
       84.2,
       85.1,
       85.2,
@@ -180,26 +180,26 @@
   {
     "student": "Citra Dewi",
     "paket": "Paket 3 — Pendidikan Kewarganegaraan (PKN)",
-    "avg": 53.2,
+    "avg": 54.7,
     "target": "50-80%",
     "status": "PASS",
     "scores": [
-      66.0,
-      50.7,
-      43.5,
+      66.4,
+      53.3,
+      45.7,
       63.9,
-      42.0
+      44.1
     ]
   },
   {
     "student": "Dimas Nugroho",
     "paket": "Paket 3 — Pendidikan Kewarganegaraan (PKN)",
-    "avg": 38.0,
+    "avg": 39.8,
     "target": "30-60%",
     "status": "PASS",
     "scores": [
-      35.0,
-      20.6,
+      38.2,
+      26.5,
       42.3,
       53.1,
       39.0
@@ -208,14 +208,14 @@
   {
     "student": "Eka Putri",
     "paket": "Paket 3 — Pendidikan Kewarganegaraan (PKN)",
-    "avg": 17.1,
+    "avg": 17.4,
     "target": "0-35%",
     "status": "PASS",
     "scores": [
-      22.6,
+      22.4,
       13.8,
+      20.8,
       19.8,
-      18.9,
       10.3
     ]
   }
